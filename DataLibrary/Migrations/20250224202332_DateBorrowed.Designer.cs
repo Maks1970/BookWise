@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(BooksContext))]
-    partial class BooksContextModelSnapshot : ModelSnapshot
+    [Migration("20250224202332_DateBorrowed")]
+    partial class DateBorrowed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace DataLibrary.Migrations
                         .IsRequired();
 
                     b.HasOne("DataLibrary.Reader", "Reader")
-                        .WithMany("BorrowedBooks")
+                        .WithMany()
                         .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -279,11 +282,6 @@ namespace DataLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("DocumenttType");
-                });
-
-            modelBuilder.Entity("DataLibrary.Reader", b =>
-                {
-                    b.Navigation("BorrowedBooks");
                 });
 #pragma warning restore 612, 618
         }
