@@ -15,7 +15,7 @@ namespace DataLibrary
         public string Name { get; set; }
         public string LastName {  get; set; }
         public int DocumentTypeId { get; set; }
-        public DocumentType DocumentType { get; set; }
+        public DocumentType DocumenttType { get; set; }
         public string DocumentNumber { get; set; }
 
     }
@@ -25,7 +25,8 @@ namespace DataLibrary
         public string Name { get; set; }
         public string LastName { get; set; }
         public string SecondName { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public ICollection<Book> Books { get; set; }
 
     }
 
@@ -34,6 +35,21 @@ namespace DataLibrary
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<Author> Authors { get; set; }
+        public int PublishingCodeId { get; set; }
+        public PublishingCode TypeOfPublishingCode { get; set; }
+        public int Year { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+    }
+    //        тип видавничого коду(посилання на таблицю)
+    //Рік
+    //Країна видавництва
+    //Місто видавництва
+
+    public class PublishingCode
+    {
+        public int PublishingCodeId { get; set; }
+        public string Name { get; set; }
     }
     public class DocumentType
     {
@@ -48,9 +64,10 @@ namespace DataLibrary
         public DbSet<Reader> Readers { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
+        public DbSet<PublishingCode> PublishingCodes { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=WIN-JLM4T99KJ5L;Initial Catalog=Books;Integrated Security=True;Trust Server Certificate=True")
+            optionsBuilder.UseSqlServer("Data Source=WIN-JLM4T99KJ5L;Initial Catalog=BookWise;Integrated Security=True;Trust Server Certificate=True")
                 .LogTo(Console.WriteLine); 
             base.OnConfiguring(optionsBuilder);
         }
