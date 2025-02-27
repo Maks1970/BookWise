@@ -23,8 +23,37 @@ namespace BookWise
                         .FirstOrDefault(l => l.Login == login);
                     if (user != null && user.Password == pass)
                     {
-                        Console.WriteLine("Signing in successful!");
-                        key = "b";
+                        string discriminator = ctx.Entry(user).Property("Discriminator").CurrentValue as string;
+                        if (discriminator == "Employee")
+                        {
+                            Console.WriteLine("Signing in successful! Librarian");
+                        }
+                        if (discriminator == "Reader")
+                        {
+                            Console.WriteLine("Signing in successful! Reader");
+                            var reader = new ReaderServiceMenu(user as Reader,ctx);
+                            while (true)
+                            {
+                                ReaderServiceMenu.ShowReaderMenu();
+                                //var keyMenu = Console.ReadLine();
+                                switch (Console.ReadLine())
+                                {
+                                    case "1":
+                                        reader.BorrowBook();
+                                        break;
+                                    case "2":
+                                        break;
+                                    case "3":
+                                        break;
+                                    case "4":
+                                        break;
+                                        // default: break;
+                                }
+
+                            }
+                        }
+
+                       // key = "b";
                     }
                     else
                     {
