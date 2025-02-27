@@ -32,7 +32,8 @@ namespace BookWise
                         {
                             Console.WriteLine("Signing in successful! Reader");
                             var reader = new ReaderServiceMenu(user as Reader,ctx);
-                            while (true)
+                            bool nenu = true;
+                            while (nenu)
                             {
                                 ReaderServiceMenu.ShowReaderMenu();
                                 //var keyMenu = Console.ReadLine();
@@ -40,6 +41,8 @@ namespace BookWise
                                 {
                                     case "1":
                                         reader.BorrowBook();
+                                        Console.WriteLine("Search by author(a), by title(t)");
+                                        reader.Search(Console.ReadLine(),Console.ReadLine());
                                         break;
                                     case "2":
                                         break;
@@ -47,13 +50,15 @@ namespace BookWise
                                         break;
                                     case "4":
                                         break;
-                                        // default: break;
+                                         default:
+                                        nenu = false;
+                                        break;
                                 }
 
                             }
                         }
 
-                       // key = "b";
+                        key = Console.ReadLine();
                     }
                     else
                     {
