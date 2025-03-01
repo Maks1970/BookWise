@@ -34,7 +34,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("BooksId");
 
-                    b.ToTable("AuthorBook");
+                    b.ToTable("AuthorBook", (string)null);
                 });
 
             modelBuilder.Entity("DataLibrary.Author", b =>
@@ -62,7 +62,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("DataLibrary.Book", b =>
@@ -95,7 +95,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("PublishingCodeId");
 
-                    b.ToTable("Book");
+                    b.ToTable("Book", (string)null);
                 });
 
             modelBuilder.Entity("DataLibrary.BorrowedBook", b =>
@@ -127,7 +127,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("ReaderId");
 
-                    b.ToTable("BorrowedBooks");
+                    b.ToTable("BorrowedBooks", (string)null);
                 });
 
             modelBuilder.Entity("DataLibrary.DocumentType", b =>
@@ -144,7 +144,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("DocumentTypeId");
 
-                    b.ToTable("DocumentTypes");
+                    b.ToTable("DocumentTypes", (string)null);
                 });
 
             modelBuilder.Entity("DataLibrary.Employee", b =>
@@ -177,7 +177,7 @@ namespace DataLibrary.Migrations
                     b.HasIndex("Login")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
 
                     b.HasDiscriminator().HasValue("Employee");
 
@@ -198,7 +198,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("PublishingCodeId");
 
-                    b.ToTable("PublishingCodes");
+                    b.ToTable("PublishingCodes", (string)null);
                 });
 
             modelBuilder.Entity("DataLibrary.Reader", b =>

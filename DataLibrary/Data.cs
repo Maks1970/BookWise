@@ -41,6 +41,7 @@ namespace DataLibrary
         public int Year { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+        //public DateTime DateForBorrowed { get; set; } = DateTime.Now.AddDays(30);
     }
     //        тип видавничого коду(посилання на таблицю)
     //Рік

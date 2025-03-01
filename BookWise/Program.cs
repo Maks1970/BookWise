@@ -1,4 +1,5 @@
 ﻿using DataLibrary;
+using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 
 namespace BookWise
@@ -31,7 +32,7 @@ namespace BookWise
                         if (discriminator == "Reader")
                         {
                             Console.WriteLine("Signing in successful! Reader");
-                            var reader = new ReaderServiceMenu(user as Reader,ctx,user.Id);
+                            var reader = new ReaderServiceMenu(user as Reader,ctx);
                             bool nenu = true;
                             while (nenu)
                             {
@@ -43,6 +44,12 @@ namespace BookWise
                                         reader.BorrowBook();
                                         Console.WriteLine("SearchBoks by author(a), by title(t)");
                                         reader.SearchBoks(Console.ReadLine(),Console.ReadLine());
+                                        Console.WriteLine("Take a book?y/n");
+                                        if (Console.ReadLine()=="y")
+                                        {
+                                            Console.WriteLine("What number?");
+                                            reader.TakeBook(Convert.ToInt32(Console.ReadLine()));
+                                        }
                                         break;
                                     case "2":
                                         reader.AboutAuthors();
@@ -51,8 +58,9 @@ namespace BookWise
                                     case "3":
                                         reader.BorrowedBooks();
                                         break;
-                                    case "4":
-                                        break;
+                                    //case "4":
+                                    //    reader.TakeBook(Convert.ToInt32(Console.ReadLine()));
+                                    //    break;
                                          default:
                                         nenu = false;
                                         break;
