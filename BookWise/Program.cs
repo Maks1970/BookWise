@@ -31,7 +31,7 @@ namespace BookWise
                         if (discriminator == "Reader")
                         {
                             Console.WriteLine("Signing in successful! Reader");
-                            var reader = new ReaderServiceMenu(user as Reader,ctx);
+                            var reader = new ReaderServiceMenu(user as Reader,ctx,user.Id);
                             bool nenu = true;
                             while (nenu)
                             {
@@ -41,12 +41,15 @@ namespace BookWise
                                 {
                                     case "1":
                                         reader.BorrowBook();
-                                        Console.WriteLine("Search by author(a), by title(t)");
-                                        reader.Search(Console.ReadLine(),Console.ReadLine());
+                                        Console.WriteLine("SearchBoks by author(a), by title(t)");
+                                        reader.SearchBoks(Console.ReadLine(),Console.ReadLine());
                                         break;
                                     case "2":
+                                        reader.AboutAuthors();
+                                       // Console.WriteLine("SearchBoks author?(y/n)");
                                         break;
                                     case "3":
+                                        reader.BorrowedBooks();
                                         break;
                                     case "4":
                                         break;
@@ -159,7 +162,7 @@ namespace BookWise
             //    LastName = " ",
             //    SecondName = " ",
             //    DateOfBirth = new DateTime(1888, 3, 4),
-            //    Books = new List<Book>() // можна додати список авторів
+            //    Book = new List<Book>() // можна додати список авторів
             //    {
             //        new Book()
             //        { 
@@ -209,7 +212,7 @@ namespace BookWise
             //ctx.Employees.Add(employee);
             //ctx.Employees.Add(reader);
             //ctx.Authors.Add(author);
-            //ctx.Books.Add(book);
+            //ctx.Book.Add(book);
             //ctx.SaveChanges();
             
         }

@@ -95,7 +95,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("PublishingCodeId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("DataLibrary.BorrowedBook", b =>
@@ -253,7 +253,7 @@ namespace DataLibrary.Migrations
 
             modelBuilder.Entity("DataLibrary.BorrowedBook", b =>
                 {
-                    b.HasOne("DataLibrary.Book", "Books")
+                    b.HasOne("DataLibrary.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -265,7 +265,7 @@ namespace DataLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Books");
+                    b.Navigation("Book");
 
                     b.Navigation("Reader");
                 });

@@ -37,7 +37,7 @@ namespace DataLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_BorrowedBooks_Books_BookId",
                         column: x => x.BookId,
-                        principalTable: "Books",
+                        principalTable: "Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(

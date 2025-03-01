@@ -80,7 +80,7 @@ namespace DataLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Book",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -121,7 +121,7 @@ namespace DataLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_AuthorBook_Books_BooksId",
                         column: x => x.BooksId,
-                        principalTable: "Books",
+                        principalTable: "Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -133,7 +133,7 @@ namespace DataLibrary.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_PublishingCodeId",
-                table: "Books",
+                table: "Book",
                 column: "PublishingCodeId");
 
             migrationBuilder.CreateIndex(
@@ -155,7 +155,7 @@ namespace DataLibrary.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Book");
 
             migrationBuilder.DropTable(
                 name: "DocumentTypes");

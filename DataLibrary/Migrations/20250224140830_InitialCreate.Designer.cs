@@ -98,7 +98,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("PublishingCodeId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("DataLibrary.DocumentType", b =>
