@@ -1,8 +1,10 @@
 ﻿using DataLibrary;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -14,7 +16,7 @@ namespace BookWise
         private Employee userLibrarian { get; set; }
         private BooksContext _booksContext { get; set; }
         // private int _readerID { get; init;}
-        //private List<Book> _books;
+        private IQueryable<Book> _books;
 
         public LibrarianService(Employee UserReader, BooksContext booksContext)
         {
@@ -39,17 +41,47 @@ namespace BookWise
             {
                 Console.WriteLine($"{author.Name}\t{author.LastName,12}\t{author.SecondName,12}\t{author.DateOfBirth.Date.ToString("dd.MM.yyyy")}");
             }
+            Console.WriteLine("What name?");
+            string key = Console.ReadLine()!;
+            foreach (var author in _booksContext.Authors.Where(a => a.Name.Contains(key)))
+            {
+                Console.WriteLine($"{author.Name,-10}\t{author.LastName,-12}\t{author.SecondName,-12}\t {author.DateOfBirth}");
+            }
 
+        }
+        public void SearchBoks(string key, string value)
+        {
+            var nam = value.Split(" ");
+            switch (key)
+            {
+                case "a":
+                     _books = _booksContext.Books
+                        .Where(book =>
+                        book.Authors
+                            .Any(a => a.Name.Contains(nam[0]) &&
+                            (nam.Length > 1 ? a.LastName.Contains(nam[1]) : true)
+                            && (nam.Length > 2 ? a.SecondName.Contains(nam[2]) : true)));
+                    ShowBooks(_books);
+                    //.ToList();
+                    //ShowBooks(booksAutors);
+                    break;
+                case "b":
+                    _books = _booksContext.Books
+                        .Where(b => b.Name.Contains(value));
+                    ShowBooks(_books);
+                    break;
+            }
         }
         public void Books()
         {
-            var _books = _booksContext.Books
+
+            var books = _booksContext.Books
             .Where(book => !_booksContext.BorrowedBooks
                      .Any(borrowed => borrowed.BookId == book.Id))
             .Select(book => book)
             .Include(a => a.Authors)
             .Include(c => c.TypeOfPublishingCode);
-            ShowBooks(_books);
+            ShowBooks(books);
         }
         private Author CreateAuthor() 
         {
@@ -78,7 +110,11 @@ namespace BookWise
             }
                 return author;
         }
-
+        public void AddAuthor()
+        {
+            _booksContext.Authors.Add(CreateAuthor());
+            _booksContext.SaveChanges();
+        }
         public void AddBooks()
         {
             var book = new Book();
@@ -137,8 +173,144 @@ namespace BookWise
             book.DaysBorrowed = Convert.ToInt32(Console.ReadLine());
             _booksContext.Books.Add(book);
             _booksContext.SaveChanges();
+            Console.WriteLine("Added");
         }
+        public void UpdateAuthor()
+        {
+            Console.WriteLine("Enter author's first name:");
+            string firstName = Console.ReadLine();
 
+            Console.WriteLine("Enter author's last name:");
+            string lastName = Console.ReadLine();
+
+            var author = _booksContext.Authors
+                .FirstOrDefault(a => a.Name == firstName && a.LastName == lastName);
+
+            if (author == null)
+            {
+                Console.WriteLine("Author not found.");
+                return;
+            }
+
+            Console.WriteLine($"Updating author: {author.Name} {author.LastName}");
+
+            Console.WriteLine("Enter new first name (or press Enter to keep current):");
+            string newFirstName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newFirstName))
+                author.Name = newFirstName;
+
+            Console.WriteLine("Enter new last name (or press Enter to keep current):");
+            string newLastName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newLastName))
+                author.LastName = newLastName;
+
+            Console.WriteLine("Enter new second name (or press Enter to keep current):");
+            string newSecondName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newSecondName))
+                author.SecondName = newSecondName;
+
+            Console.WriteLine("Enter new date of birth (yyyy-MM-dd) (or press Enter to keep current):");
+            string dobInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(dobInput) && DateTime.TryParse(dobInput, out DateTime newDob))
+                author.DateOfBirth = newDob;
+
+            _booksContext.SaveChanges();
+            Console.WriteLine("Author updated successfully!");
+        }
+        public void UpdateBooks()
+        {
+            Book book = new Book();
+            Console.WriteLine("Enter Book ID to update:");
+            int index = Convert.ToInt32(Console.ReadLine())-1;
+            int idb;
+            if (_books != null) {  idb = _books.ToList()[index].Id; }
+            else {
+                 idb= _booksContext.Books
+                .ToList()[index].Id;
+            }
+                 book = _booksContext.Books
+                .Include(b => b.Authors)
+                .Include(b => b.TypeOfPublishingCode)
+                .FirstOrDefault(b => b.Id == idb);
+
+            if (book == null)
+            {
+                Console.WriteLine("Book not found.");
+                return;
+            }
+
+            Console.WriteLine($"Updating book: {book.Name}");
+
+            Console.WriteLine("Enter new Title (or press Enter to skip):");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+                book.Name = title;
+
+            Console.WriteLine("Enter new Year (or press Enter to skip):");
+            string yearInput = Console.ReadLine();
+            if (int.TryParse(yearInput, out int year))
+                book.Year = year;
+
+            Console.WriteLine("Enter new Country (or press Enter to skip):");
+            string country = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(country))
+                book.Country = country;
+
+            Console.WriteLine("Enter new City (or press Enter to skip):");
+            string city = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(city))
+                book.City = city;
+
+            Console.WriteLine("Enter new DaysBorrowed (or press Enter to skip):");
+            string daysInput = Console.ReadLine();
+            if (int.TryParse(daysInput, out int days))
+                book.DaysBorrowed = days;
+
+            Console.WriteLine("Enter new Publishing Code (or press Enter to skip):");
+            string pubCode = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(pubCode))
+            {
+                var existingCode = _booksContext.PublishingCodes.FirstOrDefault(c => c.Name == pubCode);
+                if (existingCode != null)
+                {
+                    book.TypeOfPublishingCode = existingCode;
+                }
+                else
+                {
+                    var newCode = new PublishingCode { Name = pubCode };
+                    _booksContext.PublishingCodes.Add(newCode);
+                    book.TypeOfPublishingCode = newCode;
+                }
+            }
+            Console.WriteLine("Do you want to update authors? (y/n):");
+            if (Console.ReadLine().ToLower() == "y")
+            {
+                book.Authors.Clear();
+                bool addingAuthors = true;
+                while (addingAuthors)
+                {
+                    Author author = CreateAuthor();
+                    var existingAuthor = _booksContext.Authors
+                        .FirstOrDefault(a => a.Name == author.Name && a.LastName == author.LastName);
+
+                    if (existingAuthor != null)
+                    {
+                        book.Authors.Add(existingAuthor);
+                    }
+                    else
+                    {
+                        _booksContext.Authors.Add(author);
+                        book.Authors.Add(author);
+                    }
+
+                    Console.WriteLine("Add another author? (y/n):");
+                    addingAuthors = Console.ReadLine().ToLower() == "y";
+                }
+            }
+
+            _booksContext.SaveChanges();
+            Console.WriteLine("Book updated successfully!");
+        }
         public static void ShowReaderMenu()
         {
             Console.WriteLine();

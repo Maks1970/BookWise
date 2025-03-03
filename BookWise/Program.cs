@@ -42,6 +42,8 @@ namespace BookWise
                                         {
                                             case "b":
                                                 librarian.Books();
+                                                Console.WriteLine("Search a/b?");
+                                                librarian.SearchBoks(Console.ReadLine(),Console.ReadLine());
                                                 break;
                                             case "a":
                                                 librarian.Authors();
@@ -50,10 +52,39 @@ namespace BookWise
                                         break;
                                    
                                     case "2":
-                                        librarian.AddBooks();
+                                        bool addKey = true;
+                                        while (addKey)
+                                        {
+                                            Console.WriteLine("Books or Autors? (b/a)(or press Enter to keep current)");
+                                            switch (Console.ReadLine())
+                                            {
+                                                case "b":
+                                                    librarian.AddBooks();
+                                                    break;
+                                                case "a":
+                                                    librarian.AddAuthor();
+                                                    break;
+                                                default:
+                                                    addKey = false;
+                                                    break;
+                                            }
+                                        }
                                         break;
                                    
                                     case "3":
+                                        Console.WriteLine("Books or Autors? (b/a)");
+                                        switch (Console.ReadLine())
+                                            {
+                                                case "b":
+                                                    librarian.UpdateBooks();
+                                                    break;
+                                                case "a":
+                                                librarian.UpdateAuthor();
+                                                break;
+                                                default:
+                                                    addKey = false;
+                                                    break;
+                                            }
                                         break;
                                     case "4":
                                         break;

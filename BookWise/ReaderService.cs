@@ -41,9 +41,9 @@ namespace BookWise
             _booksContext.Entry(userReader)
                 .Collection(r => r.BorrowedBooks)
                 .Load();
-            showBooks(_books);
+            ShowBooks(_books);
         }
-        private void showBooks(List<Book> books)
+        private void ShowBooks(List<Book> books)
         {
             int index = 0;
             foreach (var book in books)
@@ -69,13 +69,13 @@ namespace BookWise
                             && (nam.Length > 2 ? a.SecondName.Contains(nam[2]):true)))
                         .ToList();
                     _books = booksAutors;
-                    showBooks (booksAutors);
+                    ShowBooks (booksAutors);
                     break;
                 case "t":
                     var booksTitle = _books
                         .Where(b=>b.Name.Contains(value))
                         .ToList();
-                    showBooks(booksTitle);
+                    ShowBooks(booksTitle);
                     _books = booksTitle;
                     break;
             }
