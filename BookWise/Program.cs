@@ -8,6 +8,7 @@ namespace BookWise
     {
         static void Main(string[] args)
         {
+            bool nenu = true;
             using var ctx = new BooksContext();
             while (true) 
             {
@@ -28,15 +29,45 @@ namespace BookWise
                         if (discriminator == "Employee")
                         {
                             Console.WriteLine("Signing in successful! Librarian");
+                           
+                            var librarian = new LibrarianService(user,ctx);
+                            while (nenu)
+                            {
+                                LibrarianService.ShowReaderMenu();
+                                switch (Console.ReadLine())
+                                {
+                                    case "1":
+                                        Console.WriteLine("b/a");
+                                        switch (Console.ReadLine())
+                                        {
+                                            case "b":
+                                                librarian.Books();
+                                                break;
+                                            case "a":
+                                                librarian.Authors();
+                                                break;
+                                        }
+                                        break;
+                                   
+                                    case "2":
+                                        librarian.AddBooks();
+                                        break;
+                                   
+                                    case "3":
+                                        break;
+                                    case "4":
+                                        break;
+                                }
+                            }
                         }
                         if (discriminator == "Reader")
                         {
                             Console.WriteLine("Signing in successful! Reader");
-                            var reader = new ReaderServiceMenu(user as Reader,ctx);
-                            bool nenu = true;
+                            var reader = new ReaderService(user as Reader,ctx);
+                            
                             while (nenu)
                             {
-                                ReaderServiceMenu.ShowReaderMenu();
+                                ReaderService.ShowReaderMenu();
                                 //var keyMenu = Console.ReadLine();
                                 switch (Console.ReadLine())
                                 {

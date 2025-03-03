@@ -10,14 +10,14 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookWise
 {
-    public class ReaderServiceMenu
+    public class ReaderService
     {
         private Reader userReader { get; set; }
         private BooksContext _booksContext {  get; set; }
        // private int _readerID { get; init;}
         private List<Book> _books;
 
-        public ReaderServiceMenu(Reader UserReader, BooksContext booksContext)
+        public ReaderService(Reader UserReader, BooksContext booksContext)
         {
             this.userReader = UserReader;
             this._booksContext = booksContext;
@@ -139,7 +139,7 @@ namespace BookWise
         }
         public void TakeBook(int index) 
         {
-            var s = Console.ReadLine();
+
             if (index-1 < 0 || index-1 >= _books.Count)
             {
                 Console.WriteLine("Invalid book index.");
@@ -152,7 +152,7 @@ namespace BookWise
                 ReaderId = userReader.Id,
                 Reader = userReader,
                 DateBorrowed = DateTime.Now,
-                DateForBorrowed = DateTime.Now.AddDays(30)
+                DateForBorrowed = DateTime.Now.AddDays(_books[index - 1].DaysBorrowed)
             };
             if (userReader.BorrowedBooks == null)
             {
