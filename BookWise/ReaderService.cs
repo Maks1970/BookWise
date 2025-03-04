@@ -1,5 +1,6 @@
 ﻿using DataLibrary;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,38 @@ namespace BookWise
             Console.WriteLine("1. Books");
             Console.WriteLine("2. Information about authors");
             Console.WriteLine("3. View Borrowed Book");
+        }
+        public static bool RegReader(BooksContext ctx)
+        {
+            var newReader = new Reader();
+            Console.WriteLine("Login");
+            newReader.Login = Console.ReadLine()!;
+            Console.WriteLine("Password");
+            newReader.Password = Console.ReadLine()!;
+            Console.WriteLine("Email");
+            newReader.Email = Console.ReadLine()!;
+            Console.WriteLine("Name");
+            newReader.Name = Console.ReadLine()!;
+            Console.WriteLine("LastName");
+            newReader.LastName = Console.ReadLine()!;
+            Console.WriteLine("Document Type(1/2/3)");
+            newReader.DocumentTypeId = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("DocumentNumber");
+            newReader.DocumentNumber = Console.ReadLine()!;
+            var existingEmployee = ctx.Employees.FirstOrDefault(u => u.Login == newReader.Login || u.Email == newReader.Email);
+            if (existingEmployee != null)
+            {
+                Console.WriteLine("A user with this login or email already exists.");
+                return false;
+            }
+            else
+            {
+                ctx.Employees.Add(newReader);
+                ctx.SaveChanges();
+                Console.WriteLine("Registration was successful!");
+                return true;
+               // key = "b";
+            }
         }
         public void BorrowBook()
         {

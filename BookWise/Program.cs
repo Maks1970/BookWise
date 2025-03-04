@@ -17,9 +17,9 @@ namespace BookWise
                 
                 while (key == "l")
                 {
-                    Console.WriteLine("Login");
+                    Console.Write("Login :");
                         var login = Console.ReadLine();
-                    Console.WriteLine("Password");
+                    Console.Write("Password :");
                     var pass = Console.ReadLine();
                     var user = ctx.Employees
                         .FirstOrDefault(l => l.Login == login);
@@ -33,7 +33,7 @@ namespace BookWise
                             var librarian = new LibrarianService(user,ctx);
                             while (nenu)
                             {
-                                LibrarianService.ShowReaderMenu();
+                                LibrarianService.ShowLibrarianMenu();
                                 switch (Console.ReadLine())
                                 {
                                     case "1":
@@ -87,6 +87,25 @@ namespace BookWise
                                             }
                                         break;
                                     case "4":
+                                        Console.WriteLine("Add/edit/delete?");
+                                        switch (Console.ReadLine())
+                                        {
+                                            case "Add":
+                                                while (!librarian.AddReader())
+                                                {
+                                                    Console.WriteLine("Try again? (y/n) ");
+                                                    if (Console.ReadLine() == "n") break;
+                                                }
+                                                break;
+                                            case "edit":
+                                                librarian.EditteReader();
+                                                break;
+                                            case "delete":
+                                                Console.WriteLine("Wat login");
+                                                librarian.DeleteReader(Console.ReadLine());
+                                                break;
+                                        }
+                                        
                                         break;
                                 }
                             }
@@ -167,33 +186,7 @@ namespace BookWise
                     }
                     while (key == "r")
                     {
-                        var newReader = new Reader();
-                        Console.WriteLine("Login");
-                        newReader.Login = Console.ReadLine()!;
-                        Console.WriteLine("Password");
-                        newReader.Password = Console.ReadLine()!;
-                        Console.WriteLine("Email");
-                        newReader.Email = Console.ReadLine()!;
-                        Console.WriteLine("Name");
-                        newReader.Name = Console.ReadLine()!;
-                        Console.WriteLine("LastName");
-                        newReader.LastName = Console.ReadLine()!;
-                        Console.WriteLine("Document Type(1/2/3)");
-                        newReader.DocumentTypeId = Convert.ToInt32(Console.ReadLine());
-                        Console.WriteLine("DocumentNumber");
-                        newReader.DocumentNumber = Console.ReadLine()!;
-                        var existingEmployee = ctx.Readers.FirstOrDefault(u => u.Login == newReader.Login || u.Email == newReader.Email);
-                        if (existingEmployee != null)
-                        {
-                            Console.WriteLine("A user with this login or email already exists.");
-                        }
-                        else
-                        {
-                            ctx.Employees.Add(newReader);
-                            ctx.SaveChanges();
-                            Console.WriteLine("Registration was successful!");
-                            key = "b";
-                        }
+                        key = ReaderService.RegReader(ctx)? "b":"r";
                     }
                 }
                 Console.WriteLine();
