@@ -9,6 +9,7 @@ namespace BookWise
         static void Main(string[] args)
         {
             bool nenu = true;
+           // Console.ResetColor();
             using var ctx = new BooksContext();
             while (true) 
             {
@@ -22,7 +23,7 @@ namespace BookWise
                     Console.Write("Password :");
                     var pass = Console.ReadLine();
                     var user = ctx.Employees
-                        .FirstOrDefault(l => l.Login == login);
+                        .FirstOrDefault(l => EF.Functions.Collate(l.Login, "SQL_Latin1_General_CP1_CS_AS") == login);
                     if (user != null && user.Password == pass)
                     {
                         string discriminator = ctx.Entry(user).Property("Discriminator").CurrentValue as string;
@@ -105,7 +106,23 @@ namespace BookWise
                                                 librarian.DeleteReader(Console.ReadLine());
                                                 break;
                                         }
-                                        
+                                        break;
+                                    case "5":
+                                        Console.WriteLine("1.Only debtors and what they should");
+                                        Console.WriteLine("2.Everyone who took books and which books (including debtors)");
+                                        Console.WriteLine("3.History of borrowing and returning books by specific reader ( number of overdues)");
+                                        switch (Console.ReadLine())
+                                        {
+                                            case "1":
+                                                librarian.DebtorsReaders();
+                                                break;
+                                            case "2":
+                                                librarian.ReaderTookBooks();
+                                                break;
+                                            case "3":
+                                                librarian.HistoryOfBorrowing();
+                                                break;
+                                        }
                                         break;
                                 }
                             }

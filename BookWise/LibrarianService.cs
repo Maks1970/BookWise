@@ -76,10 +76,8 @@ namespace BookWise
         public void Books()
         {
 
-            var books = _booksContext.Books
-            .Where(book => !_booksContext.BorrowedBooks
-                     .Any(borrowed => borrowed.BookId == book.Id))
-            .Select(book => book)
+            var books = _booksContext.Books            
+            //.Select(book => book)
             .Include(a => a.Authors)
             .Include(c => c.TypeOfPublishingCode);
             ShowBooks(books);
@@ -342,8 +340,8 @@ namespace BookWise
                         Console.WriteLine("Delete/Add");
                         switch (Console.ReadLine())
                         {
-                            case "Delete":
-                                DeleteBorrowedBook(ref reader);
+                            case "Return":
+                                ReturnBorrowedBook(ref reader);
                                 break;
                             case "Add":
                                 AddBorrowedBook(ref reader);
@@ -355,7 +353,7 @@ namespace BookWise
             }
           //  return true;
         }
-        private void DeleteBorrowedBook(ref Reader reader)
+        public void ReturnBorrowedBook(ref Reader reader)
         {
             Console.WriteLine("What book?");
 
@@ -364,9 +362,13 @@ namespace BookWise
 
             if (borrowedBook != null)
             {
-                reader.BorrowedBooks.Remove(borrowedBook);
+                //reader.BorrowedBooks.Remove(borrowedBook);
+                Console.WriteLine("What date returned? (yyyy-MM-dd)");
+                string date = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(date) && DateTime.TryParse(date, out DateTime newDob))
+                    borrowedBook.DateReturned= newDob;
                 _booksContext.SaveChanges(); // Якщо використовуєте Entity Framework
-                Console.WriteLine($"The book '{bookName}' has been removed.");
+                Console.WriteLine($"The book '{bookName}' has been up.");
                 Console.WriteLine();
             }
             else
@@ -374,7 +376,7 @@ namespace BookWise
                 Console.WriteLine("Book not found in borrowed books.");
             }
         }
-        private void AddBorrowedBook(ref Reader reader)
+        public void AddBorrowedBook(ref Reader reader)
         {
             Console.WriteLine("What book?");
 
@@ -419,6 +421,64 @@ namespace BookWise
         }
         public bool AddReader() => ReaderService.RegReader(_booksContext);
 
+        public void DebtorsReaders()
+        {
+            var borrowedReaders = _booksContext.Readers
+            .Include(r => r.BorrowedBooks)
+            .ThenInclude(b=>b.Book)
+            .Where(r => r.BorrowedBooks.Any(b => b.DateReturned == null));
+            Console.WriteLine($"{"Login",14} {"Name",14} {"LastName",14} {"DocumentNumber",14}  Email");
+            foreach (var bor in borrowedReaders)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"{bor.Login,14} {bor.Name,14} {bor.LastName,14} {bor.DocumentNumber,14}  {bor.Email}");
+                Console.ResetColor();
+                Console.WriteLine($"Debtors: {string.Join(", ", bor.BorrowedBooks.Select(b => b.Book.Name))}");
+            }
+        }
+
+        //Everyone who took books and which books (including debtors)
+        public void ReaderTookBooks()
+        {
+            var borrowedReaders = _booksContext.Readers
+           .Include(r => r.BorrowedBooks)
+           .ThenInclude(b => b.Book)
+           .Where(r => r.BorrowedBooks.Any());
+            Console.WriteLine($"{"Login",14} {"Name",14} {"LastName",14} {"DocumentNumber",14}  Email");
+            foreach (var bor in borrowedReaders)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"{bor.Login,14} {bor.Name,14} {bor.LastName,14} {bor.DocumentNumber,14}  {bor.Email}");
+                Console.ResetColor();
+                
+                Console.WriteLine($"Books:{string.Join(", ",bor.BorrowedBooks.Select(b => b.Book.Name))}");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"Borrowed books:{string.Join(", ", bor.BorrowedBooks.Where(b => b.DateForBorrowed > DateTime.Now && b.DateReturned == null).Select(b => b.Book.Name))}");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Overdue:{string.Join(", ", bor.BorrowedBooks.Where(b =>b.DateForBorrowed < DateTime.Now && b.DateReturned == null).Select(b=>b.Book.Name))}");
+            }
+            Console.ResetColor();
+        }
+        public void HistoryOfBorrowing()
+        {
+            Console.Write("Login readers:");
+            var reader = _booksContext.Readers
+                .Include(d => d.DocumenttType)
+                .Include(bor => bor.BorrowedBooks
+                .OrderBy(b => b.DateForBorrowed))
+                    .ThenInclude(b => b.Book)
+                    .ThenInclude(a=>a.Authors)
+                .FirstOrDefault(r => r.Login == Console.ReadLine());
+            Console.WriteLine($"Name: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}\n");
+            foreach (var book in reader.BorrowedBooks)
+            {
+                Console.WriteLine($"Book: {book.Book.Name}");
+                Console.WriteLine($"Author: {string.Join(" ", book.Book.Authors.Select(a => $"{a.Name}{a.LastName} {a.SecondName}  "))} ");
+                Console.WriteLine($"{"Date borrowed",-25} {"Date for borrowed",-25} {"Date returned",-25} ");
+                Console.WriteLine($"{book.DateBorrowed,-25} {book.DateForBorrowed,-25} {book.DateReturned}");
+                Console.WriteLine();
+            }
+        }
         public static void ShowLibrarianMenu()
         {
             Console.WriteLine();
