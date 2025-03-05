@@ -140,14 +140,20 @@ namespace BookWise
                                 {
                                     case "1":
                                         reader.BorrowBook();
-                                        Console.WriteLine("SearchBoks by author(a), by title(t)");
-                                        reader.SearchBoks(Console.ReadLine(),Console.ReadLine());
+
                                         Console.WriteLine("Take a book?y/n");
                                         if (Console.ReadLine()=="y")
                                         {
                                             Console.WriteLine("What number?");
                                             reader.TakeBook(Convert.ToInt32(Console.ReadLine()));
                                         }
+                                        Console.WriteLine("Take a search book?y/n");
+                                        if (Console.ReadLine() == "y")
+                                        {
+                                            Console.WriteLine("SearchBoks by author(a), by title(t)(key somsth)");
+                                            reader.SearchBoks(Console.ReadLine(), Console.ReadLine());
+                                        }
+                                            
                                         break;
                                     case "2":
                                         reader.AboutAuthors();
@@ -156,10 +162,20 @@ namespace BookWise
                                     case "3":
                                         reader.BorrowedBooks();
                                         break;
-                                    //case "4":
-                                    //    reader.TakeBook(Convert.ToInt32(Console.ReadLine()));
-                                    //    break;
-                                         default:
+                                    case "4":
+                                        reader.BorrowBook();
+                                        Console.WriteLine("What number?");
+                                        try
+                                        {
+                                            int bookId = Convert.ToInt32(Console.ReadLine());
+                                            reader.TakeBook(bookId);
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("Invalid book index!");
+                                        }
+                                        break;
+                                    default:
                                         nenu = false;
                                         break;
                                 }

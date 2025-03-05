@@ -16,7 +16,7 @@ namespace BookWise
     {
         private Employee userLibrarian { get; set; }
         private BooksContext _booksContext { get; set; }
-        // private int _readerID { get; init;}
+
         private IQueryable<Book> _books;
 
         public LibrarianService(Employee UserReader, BooksContext booksContext)
@@ -63,8 +63,6 @@ namespace BookWise
                            (nam.Length > 1 ? a.LastName.Contains(nam[1]) : true)
                            && (nam.Length > 2 ? a.SecondName.Contains(nam[2]) : true)));
                     ShowBooks(_books);
-                    //.ToList();
-                    //ShowBooks(booksAutors);
                     break;
                 case "b":
                     _books = _booksContext.Books
@@ -77,7 +75,6 @@ namespace BookWise
         {
 
             var books = _booksContext.Books            
-            //.Select(book => book)
             .Include(a => a.Authors)
             .Include(c => c.TypeOfPublishingCode);
             ShowBooks(books);
@@ -93,7 +90,6 @@ namespace BookWise
             Console.WriteLine("SecondName:");
             author.SecondName = Console.ReadLine()!;
             Console.WriteLine("DateOfBirth (yyyy-MM-dd):");
-            //author.DateOfBirth = 
             while (check!)
             {
 
@@ -135,7 +131,6 @@ namespace BookWise
                 else
                 {
                     _booksContext.Authors.Add(author);
-                    //_booksContext.SaveChanges();
                     ListAuthors.Add(author);
                 }
 
@@ -151,17 +146,13 @@ namespace BookWise
             if (existingCode != null)
             {
                 book.TypeOfPublishingCode = existingCode;
-                //var code = new PublishingCode() { Name = pubCode};
             }
             else
             {
                 var code = new PublishingCode() { Name = pubCode! };
                 book.TypeOfPublishingCode = code;
                 _booksContext.PublishingCodes.Add(code);
-                //_booksContext.Authors.Add(author);
-                // _booksContext.SaveChanges();
             }
-            // book.TypeOfPublishingCode.Name = Console.ReadLine();
             Console.WriteLine("Year");
             book.Year = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Country");
@@ -351,7 +342,6 @@ namespace BookWise
                     default: return;
                 }
             }
-          //  return true;
         }
         public void ReturnBorrowedBook(ref Reader reader)
         {
@@ -362,12 +352,11 @@ namespace BookWise
 
             if (borrowedBook != null)
             {
-                //reader.BorrowedBooks.Remove(borrowedBook);
                 Console.WriteLine("What date returned? (yyyy-MM-dd)");
                 string date = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(date) && DateTime.TryParse(date, out DateTime newDob))
                     borrowedBook.DateReturned= newDob;
-                _booksContext.SaveChanges(); // Якщо використовуєте Entity Framework
+                _booksContext.SaveChanges();
                 Console.WriteLine($"The book '{bookName}' has been up.");
                 Console.WriteLine();
             }
@@ -455,7 +444,7 @@ namespace BookWise
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Borrowed books:{string.Join(", ", bor.BorrowedBooks.Where(b => b.DateForBorrowed > DateTime.Now && b.DateReturned == null).Select(b => b.Book.Name))}");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Overdue:{string.Join(", ", bor.BorrowedBooks.Where(b =>b.DateForBorrowed < DateTime.Now && b.DateReturned == null).Select(b=>b.Book.Name))}");
+                Console.WriteLine($"Overdue : {string.Join(", ", bor.BorrowedBooks.Where(b => b.DateForBorrowed < DateTime.Now && b.DateReturned == null).Select(b => b.Book.Name))}");
             }
             Console.ResetColor();
         }
@@ -469,7 +458,11 @@ namespace BookWise
                     .ThenInclude(b => b.Book)
                     .ThenInclude(a=>a.Authors)
                 .FirstOrDefault(r => r.Login == Console.ReadLine());
-            Console.WriteLine($"Name: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}\n");
+            var countOverdue = reader.BorrowedBooks.Count(b =>  b.DateForBorrowed < DateTime.Now && b.DateReturned == null);
+            Console.WriteLine($"Name: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Overdue : {countOverdue}\n");
+            Console.ResetColor();
             foreach (var book in reader.BorrowedBooks)
             {
                 Console.WriteLine($"Book: {book.Book.Name}");

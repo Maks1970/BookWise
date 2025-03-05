@@ -28,6 +28,7 @@ namespace BookWise
             Console.WriteLine("1. Books");
             Console.WriteLine("2. Information about authors");
             Console.WriteLine("3. View Borrowed Book");
+            Console.WriteLine("4. Take a book");
         }
         public static bool RegReader(BooksContext ctx)
         {
@@ -172,7 +173,10 @@ namespace BookWise
         }
         public void TakeBook(int index) 
         {
-
+            //if (_books == null)
+            //{
+            //    BorrowBook();
+            //}
             if (index-1 < 0 || index-1 >= _books.Count)
             {
                 Console.WriteLine("Invalid book index.");
@@ -193,8 +197,9 @@ namespace BookWise
             }
             userReader.BorrowedBooks.Add(borBook);
            // _booksContext.BorrowedBooks.Add(bookForBorrow);
-            _booksContext.SaveChanges();
-            Console.WriteLine("Book successfully borrowed!");
+           // _booksContext.SaveChanges();
+            Console.WriteLine(_booksContext.SaveChanges() > 0 ? $"{_books[index - 1]} book successfully borrowed!" : "Book NOT borrowed.");
+
         }
 
     }
