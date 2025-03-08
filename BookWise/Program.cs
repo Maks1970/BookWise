@@ -42,12 +42,12 @@ namespace BookWise
                                         switch (Console.ReadLine())
                                         {
                                             case "b":
-                                                librarian.Books();
+                                                librarian.ConsoleShowBooks();
                                                 Console.WriteLine("Search a/b?");
                                                 librarian.SearchBoks(Console.ReadLine(),Console.ReadLine());
                                                 break;
                                             case "a":
-                                                librarian.Authors();
+                                                librarian.ConsoleShowAuthors();
                                                 break;
                                         }
                                         break;
@@ -56,14 +56,14 @@ namespace BookWise
                                         bool addKey = true;
                                         while (addKey)
                                         {
-                                            Console.WriteLine("Books or Autors? (b/a)(or press Enter to keep current)");
+                                            Console.WriteLine("ConsoleShowBooks or Autors? (b/a)(or press Enter to keep current)");
                                             switch (Console.ReadLine())
                                             {
                                                 case "b":
                                                     librarian.AddBooks();
                                                     break;
                                                 case "a":
-                                                    librarian.AddAuthor();
+                                                    librarian.ConsoleCreateAuthor();
                                                     break;
                                                 default:
                                                     addKey = false;
@@ -73,7 +73,7 @@ namespace BookWise
                                         break;
                                    
                                     case "3":
-                                        Console.WriteLine("Books or Autors? (b/a)");
+                                        Console.WriteLine("ConsoleShowBooks or Autors? (b/a)");
                                         switch (Console.ReadLine())
                                             {
                                                 case "b":
@@ -275,7 +275,7 @@ namespace BookWise
             //Book book = new Book()
             //{
             //    Name = "Книгап окремий клас",
-            //    Authors = new List<Author>() // можна додати список авторів
+            //    ConsoleShowAuthors = new List<Author>() // можна додати список авторів
             //    {
             //        new Author() { Name = "Ya", LastName ="Kos",SecondName=" ", DateOfBirth = new DateTime(1992,1,1) },
             //        new Author() { Name = "Mosy", LastName ="Kvold",SecondName=" ", DateOfBirth = new DateTime(1999,3,3) },
@@ -307,7 +307,7 @@ namespace BookWise
             //ctx.SaveChanges();
             //ctx.Employees.Add(employee);
             //ctx.Employees.Add(reader);
-            //ctx.Authors.Add(author);
+            //ctx.ConsoleShowAuthors.Add(author);
             //ctx.Book.Add(book);
             //ctx.SaveChanges();
             

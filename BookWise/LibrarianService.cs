@@ -1,5 +1,6 @@
 ﻿using DataLibrary;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,37 @@ namespace BookWise
 {
     internal class LibrarianService
     {
-        private Employee userLibrarian { get; set; }
+        private Employee userLibrarian;
         private BooksContext _booksContext { get; set; }
 
-        private IQueryable<Book> _books;
+        private IEnumerable<Book> _books;
 
         public LibrarianService(Employee UserReader, BooksContext booksContext)
         {
             this.userLibrarian = UserReader;
             this._booksContext = booksContext;
         }
+        
+        public IEnumerable<Book> GetBooks() => 
+            _booksContext.Books
+                .Include(a => a.Authors)
+                .Include(c => c.TypeOfPublishingCode);
+        public IEnumerable<Author> GetAuthors() => _booksContext.Authors;
+        public IEnumerable<Author> GetAuthorsByName(string key) => _booksContext.Authors.Where(a => a.Name.Contains(key));
+        public IEnumerable<Book> GetBooksByTitle(string value) =>
+            _books = _booksContext.Books
+                .Where(b => b.Name.Contains(value));
+        public IEnumerable<Book> GetBooksByAuthor(string value)
+        {
+            var nam = value.Split(" ");
+            return _books = _booksContext.Books
+                 .Where(book => book.Authors
+                            .Any(a => a.Name.Contains(nam[0]) &&
+                            (nam.Length > 1 ? a.LastName.Contains(nam[1]) : true)
+                            && (nam.Length > 2 ? a.SecondName.Contains(nam[2]) : true)));
+        }
 
-        private void ShowBooks(IQueryable<Book> books)
+        private void ConsoleBooks(IEnumerable<Book> books)
         {
             int index = 0;
             foreach (var book in books)
@@ -36,79 +56,64 @@ namespace BookWise
                 Console.WriteLine($"{++index} - {book.Name} - {book.Country} - {authors} - {book.City}-{book.Year} - {book.TypeOfPublishingCode.Name}");
             }
         }
-        public void Authors()
+        public void ConsoleShowAuthors()
         {
-            foreach (var author in _booksContext.Authors)
+            foreach (var author in GetAuthors())
             {
                 Console.WriteLine($"{author.Name}\t{author.LastName,12}\t{author.SecondName,12}\t{author.DateOfBirth.Date.ToString("dd.MM.yyyy")}");
             }
             Console.WriteLine("What name?");
             string key = Console.ReadLine()!;
-            foreach (var author in _booksContext.Authors.Where(a => a.Name.Contains(key)))
+            foreach (var author in GetAuthorsByName(key))
             {
                 Console.WriteLine($"{author.Name,-10}\t{author.LastName,-12}\t{author.SecondName,-12}\t {author.DateOfBirth}");
             }
 
         }
+        public void ConsoleShowBooks() => ConsoleBooks(GetBooks());
         public void SearchBoks(string key, string value)
         {
-            var nam = value.Split(" ");
             switch (key)
             {
                 case "a":
-                    _books = _booksContext.Books
-                       .Where(book =>
-                       book.Authors
-                           .Any(a => a.Name.Contains(nam[0]) &&
-                           (nam.Length > 1 ? a.LastName.Contains(nam[1]) : true)
-                           && (nam.Length > 2 ? a.SecondName.Contains(nam[2]) : true)));
-                    ShowBooks(_books);
+                    ConsoleBooks(GetBooksByAuthor(value));
                     break;
                 case "b":
-                    _books = _booksContext.Books
-                        .Where(b => b.Name.Contains(value));
-                    ShowBooks(_books);
+                    ConsoleBooks(GetBooksByTitle(value));
                     break;
             }
         }
-        public void Books()
+        public void CreateAuthor(string Name, string LastName, string SecondName, DateTime DateOfBirth) 
         {
-
-            var books = _booksContext.Books            
-            .Include(a => a.Authors)
-            .Include(c => c.TypeOfPublishingCode);
-            ShowBooks(books);
-        }
-        private Author CreateAuthor()
-        {
-            bool check = false;
-            var author = new Author();
-            Console.WriteLine("Name:");
-            author.Name = Console.ReadLine()!;
-            Console.WriteLine("LastName:");
-            author.LastName = Console.ReadLine()!;
-            Console.WriteLine("SecondName:");
-            author.SecondName = Console.ReadLine()!;
-            Console.WriteLine("DateOfBirth (yyyy-MM-dd):");
-            while (check!)
+            var author = new Author()
             {
-
-            }
+                Name = Name,
+                LastName = LastName,
+                SecondName = SecondName,
+                DateOfBirth = DateOfBirth
+            };
+            _booksContext.Authors.Add(author);
+            _booksContext.SaveChanges();
+        }
+        public void ConsoleCreateAuthor() 
+        {
+            DateTime DateB;
+            Console.WriteLine("Name:");
+            string Name = Console.ReadLine()!;
+            Console.WriteLine("LastName:");
+            string LastName = Console.ReadLine()!;
+            Console.WriteLine("SecondName:");
+            string SecondName = Console.ReadLine()!;
+            Console.WriteLine("DateOfBirth (yyyy-MM-dd):");
             if (DateTime.TryParse(Console.ReadLine(), out DateTime c))
             {
-                author.DateOfBirth = c;
-                check = true;
+                DateB = c;
+                CreateAuthor(Name, LastName, SecondName, DateB);
             }
             else
             {
                 Console.WriteLine("Невірний формат дати.");
             }
-            return author;
-        }
-        public void AddAuthor()
-        {
-            _booksContext.Authors.Add(CreateAuthor());
-            _booksContext.SaveChanges();
         }
         public void AddBooks()
         {
@@ -116,7 +121,7 @@ namespace BookWise
             bool yet = true;
             Console.WriteLine("Title");
             book.Name = Console.ReadLine();
-            Console.WriteLine("Authors");
+            Console.WriteLine("ConsoleShowAuthors");
             List<Author> ListAuthors = new List<Author>();
             while (yet)
             {
@@ -440,7 +445,7 @@ namespace BookWise
                 Console.WriteLine($"{bor.Login,14} {bor.Name,14} {bor.LastName,14} {bor.DocumentNumber,14}  {bor.Email}");
                 Console.ResetColor();
                 
-                Console.WriteLine($"Books:{string.Join(", ",bor.BorrowedBooks.Select(b => b.Book.Name))}");
+                Console.WriteLine($"ConsoleShowBooks:{string.Join(", ",bor.BorrowedBooks.Select(b => b.Book.Name))}");
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Borrowed books:{string.Join(", ", bor.BorrowedBooks.Where(b => b.DateForBorrowed > DateTime.Now && b.DateReturned == null).Select(b => b.Book.Name))}");
                 Console.ForegroundColor = ConsoleColor.Red;

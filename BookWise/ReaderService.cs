@@ -25,7 +25,7 @@ namespace BookWise
         }
         public static void ShowReaderMenu()
         {
-            Console.WriteLine("1. Books");
+            Console.WriteLine("1. ConsoleShowBooks");
             Console.WriteLine("2. Information about authors");
             Console.WriteLine("3. View Borrowed Book");
             Console.WriteLine("4. Take a book");
@@ -142,7 +142,7 @@ namespace BookWise
             var withoutExBooks = borrowedBoks
                 .Where(b => !expiredBooks.Any(ex => ex.Book.Name == b.Book.Name) && b.DateReturned == null)
                  .OrderBy(d => d.DateForBorrowed);
-            Console.WriteLine($"{"Titel".PadRight(30)}{"Authors".PadRight(90)}{"DateBorrowed".PadRight(15)}{"DateForReturned".PadRight(17)}{"DateReturned".PadRight(15)}");
+            Console.WriteLine($"{"Titel".PadRight(30)}{"ConsoleShowAuthors".PadRight(90)}{"DateBorrowed".PadRight(15)}{"DateForReturned".PadRight(17)}{"DateReturned".PadRight(15)}");
             Console.WriteLine(new string('-', 180));
             Console.ForegroundColor = ConsoleColor.Red;
             foreach (var exBook in expiredBooks)
