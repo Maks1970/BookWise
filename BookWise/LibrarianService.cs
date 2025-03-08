@@ -1,15 +1,5 @@
 ﻿using DataLibrary;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookWise
 {
@@ -83,21 +73,26 @@ namespace BookWise
                     break;
             }
         }
-        public void CreateAuthor(string Name, string LastName, string SecondName, DateTime DateOfBirth) 
+        public void AddAuthor(string name, string lastName, string secondName, DateTime dateOfBirth) 
         {
-            var author = new Author()
+            var d = !_booksContext.Authors.Any(a => a.Name == name && a.LastName == lastName && a.SecondName == secondName);
+            if (!_booksContext.Authors.Any(a => a.Name == name && a.LastName == lastName && a.SecondName== secondName))
             {
-                Name = Name,
-                LastName = LastName,
-                SecondName = SecondName,
-                DateOfBirth = DateOfBirth
-            };
-            _booksContext.Authors.Add(author);
-            _booksContext.SaveChanges();
+                var author = new Author()
+                {
+                    Name = name,
+                    LastName = lastName,
+                    SecondName = secondName,
+                    DateOfBirth = dateOfBirth
+                };
+                _booksContext.Authors.Add(author);
+                _booksContext.SaveChanges();
+            }
+                
         }
-        public void ConsoleCreateAuthor() 
+        public Author ConsoleAddAuthor() 
         {
-            DateTime DateB;
+            //DateTime DateB;
             Console.WriteLine("Name:");
             string Name = Console.ReadLine()!;
             Console.WriteLine("LastName:");
@@ -105,71 +100,137 @@ namespace BookWise
             Console.WriteLine("SecondName:");
             string SecondName = Console.ReadLine()!;
             Console.WriteLine("DateOfBirth (yyyy-MM-dd):");
-            if (DateTime.TryParse(Console.ReadLine(), out DateTime c))
-            {
-                DateB = c;
-                CreateAuthor(Name, LastName, SecondName, DateB);
-            }
-            else
-            {
-                Console.WriteLine("Невірний формат дати.");
-            }
-        }
-        public void AddBooks()
-        {
-            var book = new Book();
-            bool yet = true;
-            Console.WriteLine("Title");
-            book.Name = Console.ReadLine();
-            Console.WriteLine("ConsoleShowAuthors");
-            List<Author> ListAuthors = new List<Author>();
-            while (yet)
-            {
-                Author author = CreateAuthor();
-                var existingAuthor = _booksContext.Authors
-                    .FirstOrDefault(a => a.Name == author.Name && a.LastName == author.LastName);
-
-                if (existingAuthor != null)
+           
+                if (DateTime.TryParse(Console.ReadLine(), out DateTime DateB))
                 {
-                    ListAuthors.Add(existingAuthor);
+                    AddAuthor(Name, LastName, SecondName, DateB);
+                var j = _booksContext.Authors.FirstOrDefault(a => a.Name == Name && a.LastName == LastName && a.DateOfBirth == DateB)!;
+                return j;
                 }
                 else
                 {
-                    _booksContext.Authors.Add(author);
-                    ListAuthors.Add(author);
+                    Console.WriteLine("Невірний формат дати.");
                 }
-
+            
+            
+            return null;
+        }
+        public void AddBooks( string title, List<Author> authors, PublishingCode publishingCode, int year, string coutry, string city, int dayBorr) 
+        {
+            Book book = new Book()
+            {
+                Name = title,
+                Authors = authors,
+                TypeOfPublishingCode = publishingCode,
+                Year = year,
+                Country = coutry,
+                City = city,
+                DaysBorrowed = dayBorr
+            };
+            _booksContext.Books.Add(book);
+            _booksContext.SaveChanges();
+        }
+        public void AddPublishingCode(string pubCode)
+        {
+            var code = new PublishingCode() { Name = pubCode };
+            _booksContext.PublishingCodes.Add(code);
+        }
+        public void ConsoleAddBooks()
+        {
+            bool yet = true;
+            Console.WriteLine("Title");
+            string title = Console.ReadLine();
+            Console.WriteLine("Authors");
+            List<Author> ListAuthors = new List<Author>();
+            while (yet)
+            {
+                Author author = ConsoleAddAuthor();
+                ListAuthors.Add(author);
                 Console.WriteLine("Another author? y/n");
                 yet = Console.ReadLine() == "y";
             }
-            book.Authors = ListAuthors;
             Console.WriteLine("PublishingCode");
+            PublishingCode publishingCode;
             var pubCode = Console.ReadLine();
             var existingCode = _booksContext.PublishingCodes
                     .FirstOrDefault(a => a.Name == pubCode);
 
             if (existingCode != null)
             {
-                book.TypeOfPublishingCode = existingCode;
+                publishingCode = existingCode;
             }
             else
             {
                 var code = new PublishingCode() { Name = pubCode! };
-                book.TypeOfPublishingCode = code;
+                publishingCode = code;
                 _booksContext.PublishingCodes.Add(code);
+
             }
             Console.WriteLine("Year");
-            book.Year = Convert.ToInt32(Console.ReadLine());
+            int year = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Country");
-            book.Country = Console.ReadLine();
+            string country = Console.ReadLine();
             Console.WriteLine("City");
-            book.City = Console.ReadLine();
+            string city = Console.ReadLine();
             Console.WriteLine("DaysBorrowed");
-            book.DaysBorrowed = Convert.ToInt32(Console.ReadLine());
-            _booksContext.Books.Add(book);
-            _booksContext.SaveChanges();
-            Console.WriteLine("Added");
+            int daysBorr = Convert.ToInt32(Console.ReadLine());
+            AddBooks(title, ListAuthors, publishingCode,year,country,city,daysBorr);
         }
+        //public void AddBooks()
+        //{
+        //    var book = new Book();
+        //    bool yet = true;
+        //    Console.WriteLine("Title");
+        //    book.Name = Console.ReadLine();
+        //    Console.WriteLine("Authors");
+        //    List<Author> ListAuthors = new List<Author>();
+        //    while (yet)
+        //    {
+        //        Author author = ConsoleAddAuthor();
+        //        var existingAuthor = _booksContext.Authors
+        //            .FirstOrDefault(a => a.Name == author.Name && a.LastName == author.LastName);
+
+        //        if (existingAuthor != null)
+        //        {
+        //            ListAuthors.Add(existingAuthor);
+        //        }
+        //        else
+        //        {
+        //            _booksContext.Authors.Add(author);
+        //            ListAuthors.Add(author);
+        //        }
+
+        //        Console.WriteLine("Another author? y/n");
+        //        yet = Console.ReadLine() == "y";
+        //    }
+        //    book.Authors = ListAuthors;
+        //    Console.WriteLine("PublishingCode");
+        //    var pubCode = Console.ReadLine();
+        //    var existingCode = _booksContext.PublishingCodes
+        //            .FirstOrDefault(a => a.Name == pubCode);
+
+        //    if (existingCode != null)
+        //    {
+        //        book.TypeOfPublishingCode = existingCode;
+        //    }
+        //    else
+        //    {
+        //        var code = new PublishingCode() { Name = pubCode! };
+        //        book.TypeOfPublishingCode = code;
+        //        _booksContext.PublishingCodes.Add(code);
+        //    }
+        //    Console.WriteLine("Year");
+        //    book.Year = Convert.ToInt32(Console.ReadLine());
+        //    Console.WriteLine("Country");
+        //    book.Country = Console.ReadLine();
+        //    Console.WriteLine("City");
+        //    book.City = Console.ReadLine();
+        //    Console.WriteLine("DaysBorrowed");
+        //    book.DaysBorrowed = Convert.ToInt32(Console.ReadLine());
+        //    _booksContext.Books.Add(book);
+        //    _booksContext.SaveChanges();
+        //    Console.WriteLine("Added");
+        //}
         public void UpdateAuthor()
         {
             Console.WriteLine("Enter author's first name:");
@@ -284,7 +345,7 @@ namespace BookWise
                 bool addingAuthors = true;
                 while (addingAuthors)
                 {
-                    Author author = CreateAuthor();
+                    Author author = ConsoleAddAuthor();
                     var existingAuthor = _booksContext.Authors
                         .FirstOrDefault(a => a.Name == author.Name && a.LastName == author.LastName);
 

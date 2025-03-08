@@ -56,14 +56,14 @@ namespace BookWise
                                         bool addKey = true;
                                         while (addKey)
                                         {
-                                            Console.WriteLine("ConsoleShowBooks or Autors? (b/a)(or press Enter to keep current)");
+                                            Console.WriteLine("Books or Autors? (b/a)(or press Enter to keep current)");
                                             switch (Console.ReadLine())
                                             {
                                                 case "b":
-                                                    librarian.AddBooks();
+                                                    librarian.ConsoleAddBooks();
                                                     break;
                                                 case "a":
-                                                    librarian.ConsoleCreateAuthor();
+                                                    librarian.ConsoleAddAuthor();
                                                     break;
                                                 default:
                                                     addKey = false;
