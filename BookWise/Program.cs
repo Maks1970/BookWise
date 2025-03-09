@@ -80,7 +80,7 @@ namespace BookWise
                                                     librarian.UpdateBooks();
                                                     break;
                                                 case "a":
-                                                librarian.UpdateAuthor();
+                                                librarian.ConsoleUpdateAuthor();
                                                 break;
                                                 default:
                                                     addKey = false;
@@ -103,7 +103,7 @@ namespace BookWise
                                                 break;
                                             case "delete":
                                                 Console.WriteLine("Wat login");
-                                                librarian.DeleteReader(Console.ReadLine());
+                                                librarian.ConsoleDeleteReader(Console.ReadLine());
                                                 break;
                                         }
                                         break;
@@ -114,7 +114,7 @@ namespace BookWise
                                         switch (Console.ReadLine())
                                         {
                                             case "1":
-                                                librarian.DebtorsReaders();
+                                                librarian.ConsoleDebtorsReaders();
                                                 break;
                                             case "2":
                                                 librarian.ReaderTookBooks();

@@ -1,5 +1,7 @@
 ﻿using DataLibrary;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 
 namespace BookWise
 {
@@ -15,16 +17,17 @@ namespace BookWise
             this.userLibrarian = UserReader;
             this._booksContext = booksContext;
         }
-        
-        public IEnumerable<Book> GetBooks() => 
-            _booksContext.Books
+
+        public IEnumerable<Book> GetBooks()
+        {
+            return _booksContext.Books
                 .Include(a => a.Authors)
                 .Include(c => c.TypeOfPublishingCode);
+        }
+
         public IEnumerable<Author> GetAuthors() => _booksContext.Authors;
         public IEnumerable<Author> GetAuthorsByName(string key) => _booksContext.Authors.Where(a => a.Name.Contains(key));
-        public IEnumerable<Book> GetBooksByTitle(string value) =>
-            _books = _booksContext.Books
-                .Where(b => b.Name.Contains(value));
+        public IEnumerable<Book> GetBooksByTitle(string value) =>_books = _booksContext.Books.Where(b => b.Name.Contains(value));
         public IEnumerable<Book> GetBooksByAuthor(string value)
         {
             var nam = value.Split(" ");
@@ -135,6 +138,8 @@ namespace BookWise
             var code = new PublishingCode() { Name = pubCode };
             _booksContext.PublishingCodes.Add(code);
         }
+        public PublishingCode GetPublishingCode(string pubCode) =>  _booksContext.PublishingCodes.FirstOrDefault(a => a.Name == pubCode);
+
         public void ConsoleAddBooks()
         {
             bool yet = true;
@@ -152,20 +157,7 @@ namespace BookWise
             Console.WriteLine("PublishingCode");
             PublishingCode publishingCode;
             var pubCode = Console.ReadLine();
-            var existingCode = _booksContext.PublishingCodes
-                    .FirstOrDefault(a => a.Name == pubCode);
-
-            if (existingCode != null)
-            {
-                publishingCode = existingCode;
-            }
-            else
-            {
-                var code = new PublishingCode() { Name = pubCode! };
-                publishingCode = code;
-                _booksContext.PublishingCodes.Add(code);
-
-            }
+             publishingCode = GetPublishingCode(pubCode!) != null ? GetPublishingCode(pubCode!) : new PublishingCode() { Name = pubCode! };
             Console.WriteLine("Year");
             int year = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Country");
@@ -176,62 +168,14 @@ namespace BookWise
             int daysBorr = Convert.ToInt32(Console.ReadLine());
             AddBooks(title, ListAuthors, publishingCode,year,country,city,daysBorr);
         }
-        //public void AddBooks()
-        //{
-        //    var book = new Book();
-        //    bool yet = true;
-        //    Console.WriteLine("Title");
-        //    book.Name = Console.ReadLine();
-        //    Console.WriteLine("Authors");
-        //    List<Author> ListAuthors = new List<Author>();
-        //    while (yet)
-        //    {
-        //        Author author = ConsoleAddAuthor();
-        //        var existingAuthor = _booksContext.Authors
-        //            .FirstOrDefault(a => a.Name == author.Name && a.LastName == author.LastName);
 
-        //        if (existingAuthor != null)
-        //        {
-        //            ListAuthors.Add(existingAuthor);
-        //        }
-        //        else
-        //        {
-        //            _booksContext.Authors.Add(author);
-        //            ListAuthors.Add(author);
-        //        }
+        public Author GetAuthor(string firstName, string lastName)
+        {
+            return _booksContext.Authors
+                    .FirstOrDefault(a => a.Name == firstName && a.LastName == lastName);
+        }
 
-        //        Console.WriteLine("Another author? y/n");
-        //        yet = Console.ReadLine() == "y";
-        //    }
-        //    book.Authors = ListAuthors;
-        //    Console.WriteLine("PublishingCode");
-        //    var pubCode = Console.ReadLine();
-        //    var existingCode = _booksContext.PublishingCodes
-        //            .FirstOrDefault(a => a.Name == pubCode);
-
-        //    if (existingCode != null)
-        //    {
-        //        book.TypeOfPublishingCode = existingCode;
-        //    }
-        //    else
-        //    {
-        //        var code = new PublishingCode() { Name = pubCode! };
-        //        book.TypeOfPublishingCode = code;
-        //        _booksContext.PublishingCodes.Add(code);
-        //    }
-        //    Console.WriteLine("Year");
-        //    book.Year = Convert.ToInt32(Console.ReadLine());
-        //    Console.WriteLine("Country");
-        //    book.Country = Console.ReadLine();
-        //    Console.WriteLine("City");
-        //    book.City = Console.ReadLine();
-        //    Console.WriteLine("DaysBorrowed");
-        //    book.DaysBorrowed = Convert.ToInt32(Console.ReadLine());
-        //    _booksContext.Books.Add(book);
-        //    _booksContext.SaveChanges();
-        //    Console.WriteLine("Added");
-        //}
-        public void UpdateAuthor()
+        public void ConsoleUpdateAuthor()
         {
             Console.WriteLine("Enter author's first name:");
             string firstName = Console.ReadLine();
@@ -239,8 +183,7 @@ namespace BookWise
             Console.WriteLine("Enter author's last name:");
             string lastName = Console.ReadLine();
 
-            var author = _booksContext.Authors
-                .FirstOrDefault(a => a.Name == firstName && a.LastName == lastName);
+            var author = GetAuthor(firstName, lastName);
 
             if (author == null)
             {
@@ -273,22 +216,26 @@ namespace BookWise
             _booksContext.SaveChanges();
             Console.WriteLine("Author updated successfully!");
         }
+        public Book GetBook(int index) 
+        {
+            int idb;
+            if (_books != null) { idb = _books.ToList()[index].Id; }
+            else
+            {
+                idb = _booksContext.Books
+               .ToList()[index].Id;
+            }
+           return _booksContext.Books
+               .Include(b => b.Authors)
+               .Include(b => b.TypeOfPublishingCode)
+               .FirstOrDefault(b => b.Id == idb);
+        } 
         public void UpdateBooks()
         {
             Book book = new Book();
             Console.WriteLine("Enter Book ID to update:");
             int index = Convert.ToInt32(Console.ReadLine()) - 1;
-            int idb;
-            if (_books != null) { idb = _books.ToList()[index].Id; }
-            else {
-                idb = _booksContext.Books
-               .ToList()[index].Id;
-            }
-            book = _booksContext.Books
-           .Include(b => b.Authors)
-           .Include(b => b.TypeOfPublishingCode)
-           .FirstOrDefault(b => b.Id == idb);
-
+            book = GetBook(index);
             if (book == null)
             {
                 Console.WriteLine("Book not found.");
@@ -326,17 +273,7 @@ namespace BookWise
             string pubCode = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(pubCode))
             {
-                var existingCode = _booksContext.PublishingCodes.FirstOrDefault(c => c.Name == pubCode);
-                if (existingCode != null)
-                {
-                    book.TypeOfPublishingCode = existingCode;
-                }
-                else
-                {
-                    var newCode = new PublishingCode { Name = pubCode };
-                    _booksContext.PublishingCodes.Add(newCode);
-                    book.TypeOfPublishingCode = newCode;
-                }
+                book.TypeOfPublishingCode = GetPublishingCode(pubCode!) != null ? GetPublishingCode(pubCode!) : new PublishingCode() { Name = pubCode! };
             }
             Console.WriteLine("Do you want to update authors? (y/n):");
             if (Console.ReadLine().ToLower() == "y")
@@ -346,39 +283,28 @@ namespace BookWise
                 while (addingAuthors)
                 {
                     Author author = ConsoleAddAuthor();
-                    var existingAuthor = _booksContext.Authors
-                        .FirstOrDefault(a => a.Name == author.Name && a.LastName == author.LastName);
-
-                    if (existingAuthor != null)
-                    {
-                        book.Authors.Add(existingAuthor);
-                    }
-                    else
-                    {
-                        _booksContext.Authors.Add(author);
-                        book.Authors.Add(author);
-                    }
-
+                    book.Authors.Add(author);
                     Console.WriteLine("Add another author? (y/n):");
                     addingAuthors = Console.ReadLine().ToLower() == "y";
                 }
             }
 
-            _booksContext.SaveChanges();
-            Console.WriteLine("Book updated successfully!");
+            Console.WriteLine(_booksContext.SaveChanges() > 0 ? "Book updated successfully!" : "No changes were made.");
+        }
+        public Reader GetReader(string log)
+        {
+            return _booksContext.Readers
+                .Include(d => d.DocumenttType)
+                .Include(bor => bor.BorrowedBooks)
+                    .ThenInclude(b => b.Book)
+                .FirstOrDefault(r => r.Login == log);
         }
 
         public void EditteReader()
         {
             Console.Write("Login readers:");
-            var reader = _booksContext.Readers
-                .Include(d=>d.DocumenttType)
-                .Include(bor=>bor.BorrowedBooks)
-                    .ThenInclude(b=>b.Book)
-                .FirstOrDefault(r => r.Login == Console.ReadLine());
-                //_booksContext.Entry(reader)
-                //.Collection(r => r.BorrowedBooks)
-                //.Load();
+            var reader = GetReader(Console.ReadLine());
+
             while (true)
             {
                 Console.WriteLine($" What will we change?\r\nName: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}\nBorrowedBooks: {string.Join(", ", reader.BorrowedBooks.Select(b=>b.Book.Name)) }");
@@ -398,10 +324,10 @@ namespace BookWise
                         switch (Console.ReadLine())
                         {
                             case "Return":
-                                ReturnBorrowedBook(ref reader);
+                                ConsoleReturnBorrowedBook(ref reader);
                                 break;
                             case "Add":
-                                AddBorrowedBook(ref reader);
+                                ConsoleAddBorrowedBook(ref reader);
                                 break;
                         }    
                         break;
@@ -409,20 +335,25 @@ namespace BookWise
                 }
             }
         }
-        public void ReturnBorrowedBook(ref Reader reader)
+        public BorrowedBook GetBorrowedBook(Reader reader, string bookName)
+        {
+            return reader.BorrowedBooks.FirstOrDefault(b => b.Book.Name == bookName);
+        }
+        public void ReturnBorrowedBook( BorrowedBook borrowedBook, DateTime date)
+        {
+            borrowedBook.DateReturned = date;
+            _booksContext.SaveChanges();
+        }
+        public void ConsoleReturnBorrowedBook(ref Reader reader)
         {
             Console.WriteLine("What book?");
-
             string bookName = Console.ReadLine();
-            var borrowedBook = reader.BorrowedBooks.FirstOrDefault(b => b.Book.Name == bookName);
-
+            var borrowedBook = GetBorrowedBook(reader, bookName);
             if (borrowedBook != null)
             {
                 Console.WriteLine("What date returned? (yyyy-MM-dd)");
                 string date = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(date) && DateTime.TryParse(date, out DateTime newDob))
-                    borrowedBook.DateReturned= newDob;
-                _booksContext.SaveChanges();
+                if (!string.IsNullOrWhiteSpace(date) && DateTime.TryParse(date, out DateTime newDob)) ReturnBorrowedBook( borrowedBook,newDob);
                 Console.WriteLine($"The book '{bookName}' has been up.");
                 Console.WriteLine();
             }
@@ -431,42 +362,52 @@ namespace BookWise
                 Console.WriteLine("Book not found in borrowed books.");
             }
         }
-        public void AddBorrowedBook(ref Reader reader)
+        public Book GetBook(string bookName) => _booksContext.Books
+                .Include(d => d.TypeOfPublishingCode)
+                .Include(a => a.Authors)
+                .FirstOrDefault(b => b.Name == bookName);
+        public bool IsBorrowed(Book borrowBook) => _booksContext.BorrowedBooks.Any(b => b.BookId == borrowBook.Id && b.DateReturned == null);
+        public void AddBorrowedBook(Reader reader, Book book)
+        {
+            var borrowedBook = new BorrowedBook
+            {
+                Reader = reader,
+                Book = book,
+                DateBorrowed = DateTime.Now,
+            };
+            reader.BorrowedBooks.Add(borrowedBook);
+            _booksContext.SaveChanges();
+        }
+        public void ConsoleAddBorrowedBook(ref Reader reader)
         {
             Console.WriteLine("What book?");
 
             string bookName = Console.ReadLine();
-            var borrowBook = _booksContext.Books
-                .Include(d=>d.TypeOfPublishingCode)
-                .Include(a=>a.Authors)
-                .FirstOrDefault(b => b.Name == bookName);
+            var borrowBook = GetBook(bookName);
             if (borrowBook == null)
             {
                 Console.WriteLine("Book not found in books.");
                 return;
             }
-            if (_booksContext.BorrowedBooks.Any(b => b.BookId == borrowBook.Id && b.DateReturned == null))
+            if (IsBorrowed(borrowBook))
             {
                 Console.WriteLine("This book is already borrowed by another reader.");
                 return;
             }
-            var borrowedBook = new BorrowedBook
-            {
-                Reader = reader,
-                Book = borrowBook,
-                DateBorrowed = DateTime.Now,
-            };
-            reader.BorrowedBooks.Add(borrowedBook);
-            _booksContext.SaveChanges(); // Збереження змін у базі
+            AddBorrowedBook(reader,borrowBook);
             Console.WriteLine($"Book '{bookName}' has been borrowed.");
         }
-        public void DeleteReader(string login) 
+        public void RemoveReader(Reader reader) 
         {
-            var reader = _booksContext.Readers.FirstOrDefault(u=>u.Login==login);
+            _booksContext.Readers.Remove(reader);
+            _booksContext.SaveChanges();
+        }
+        public void ConsoleDeleteReader(string login)
+        {
+            var reader = GetReader(login);
             if (reader != null)
             {
-                _booksContext.Readers.Remove(reader);
-                _booksContext.SaveChanges();
+                RemoveReader(reader);
                 Console.WriteLine($"Reader with login '{login}' has been deleted.");
             }
             else
@@ -474,14 +415,12 @@ namespace BookWise
                 Console.WriteLine($"Reader with login '{login}' not found.");
             }
         }
+        //To EDIT
         public bool AddReader() => ReaderService.RegReader(_booksContext);
 
-        public void DebtorsReaders()
+        public void ConsoleDebtorsReaders()
         {
-            var borrowedReaders = _booksContext.Readers
-            .Include(r => r.BorrowedBooks)
-            .ThenInclude(b=>b.Book)
-            .Where(r => r.BorrowedBooks.Any(b => b.DateReturned == null));
+            var borrowedReaders = DebtorsReaders();
             Console.WriteLine($"{"Login",14} {"Name",14} {"LastName",14} {"DocumentNumber",14}  Email");
             foreach (var bor in borrowedReaders)
             {
@@ -490,6 +429,14 @@ namespace BookWise
                 Console.ResetColor();
                 Console.WriteLine($"Debtors: {string.Join(", ", bor.BorrowedBooks.Select(b => b.Book.Name))}");
             }
+        }
+
+        public IEnumerable<Reader> DebtorsReaders()
+        {
+            return _booksContext.Readers
+            .Include(r => r.BorrowedBooks)
+            .ThenInclude(b => b.Book)
+            .Where(r => r.BorrowedBooks.Any(b => b.DateReturned == null));
         }
 
         //Everyone who took books and which books (including debtors)
