@@ -307,7 +307,7 @@ namespace BookWise
 
             while (true)
             {
-                Console.WriteLine($" What will we change?\r\nName: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}\nBorrowedBooks: {string.Join(", ", reader.BorrowedBooks.Select(b=>b.Book.Name)) }");
+                Console.WriteLine($" What will we change?\r\nName: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}\nBorrowedBooks: {string.Join(", ", reader.BorrowedBooks.Where(b => b.DateReturned == null).Select(b=>b.Book.Name)) }");
                 switch (Console.ReadLine())
                 {
                     case "Name":
@@ -319,15 +319,15 @@ namespace BookWise
                     case "DocumentType":
                         reader.DocumenttType.Name = Console.ReadLine()!;
                         break;
-                    case "BorrowedBooks":
-                        Console.WriteLine("Delete/Add");
+                    case "ConsoleBorrowedBooks":
+                        Console.WriteLine("Return/Add");
                         switch (Console.ReadLine())
                         {
                             case "Return":
-                                ConsoleReturnBorrowedBook(ref reader);
+                                ConsoleReturnBorrowedBook(reader);
                                 break;
                             case "Add":
-                                ConsoleAddBorrowedBook(ref reader);
+                                ConsoleAddBorrowedBook(reader);
                                 break;
                         }    
                         break;
@@ -344,7 +344,11 @@ namespace BookWise
             borrowedBook.DateReturned = date;
             _booksContext.SaveChanges();
         }
-        public void ConsoleReturnBorrowedBook(ref Reader reader)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
+        public void ConsoleReturnBorrowedBook(Reader reader)
         {
             Console.WriteLine("What book?");
             string bookName = Console.ReadLine();
@@ -378,7 +382,7 @@ namespace BookWise
             reader.BorrowedBooks.Add(borrowedBook);
             _booksContext.SaveChanges();
         }
-        public void ConsoleAddBorrowedBook(ref Reader reader)
+        public void ConsoleAddBorrowedBook(Reader reader)
         {
             Console.WriteLine("What book?");
 
@@ -416,7 +420,7 @@ namespace BookWise
             }
         }
         //To EDIT
-        public bool AddReader() => ReaderService.RegReader(_booksContext);
+        public bool AddReader() => ReaderService.ConsoleRegReader(_booksContext);
 
         public void ConsoleDebtorsReaders()
         {
@@ -440,12 +444,16 @@ namespace BookWise
         }
 
         //Everyone who took books and which books (including debtors)
-        public void ReaderTookBooks()
+        public IEnumerable<Reader> ReadersTookBooks()
         {
-            var borrowedReaders = _booksContext.Readers
+            return _booksContext.Readers
            .Include(r => r.BorrowedBooks)
            .ThenInclude(b => b.Book)
            .Where(r => r.BorrowedBooks.Any());
+        }
+        public void ConsoleReaderTookBooks()
+        {
+            var borrowedReaders = ReadersTookBooks();
             Console.WriteLine($"{"Login",14} {"Name",14} {"LastName",14} {"DocumentNumber",14}  Email");
             foreach (var bor in borrowedReaders)
             {
@@ -461,17 +469,26 @@ namespace BookWise
             }
             Console.ResetColor();
         }
-        public void HistoryOfBorrowing()
+        public Reader HistoryOfBorrowingReader(string login)
         {
-            Console.Write("Login readers:");
-            var reader = _booksContext.Readers
+            return _booksContext.Readers
                 .Include(d => d.DocumenttType)
                 .Include(bor => bor.BorrowedBooks
                 .OrderBy(b => b.DateForBorrowed))
                     .ThenInclude(b => b.Book)
-                    .ThenInclude(a=>a.Authors)
-                .FirstOrDefault(r => r.Login == Console.ReadLine());
-            var countOverdue = reader.BorrowedBooks.Count(b =>  b.DateForBorrowed < DateTime.Now && b.DateReturned == null);
+                    .ThenInclude(a => a.Authors)
+                .FirstOrDefault(r => r.Login == login);
+        }
+        public int CountOverdue(Reader reader) 
+        {
+            return reader.BorrowedBooks.Count(b => b.DateForBorrowed < DateTime.Now && b.DateReturned == null);
+        }
+
+        public void ConsoleHistoryOfBorrowing()
+        {
+            Console.Write("Login readers:");
+            var reader = HistoryOfBorrowingReader(Console.ReadLine());
+            var countOverdue = CountOverdue(reader);
             Console.WriteLine($"Name: {reader.Name}\nLastName: {reader.LastName}\nDocumentType: {reader.DocumenttType.Name}");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Overdue : {countOverdue}\n");

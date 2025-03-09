@@ -9,7 +9,6 @@ namespace BookWise
         static void Main(string[] args)
         {
             bool nenu = true;
-           // Console.ResetColor();
             using var ctx = new BooksContext();
             while (true) 
             {
@@ -73,7 +72,7 @@ namespace BookWise
                                         break;
                                    
                                     case "3":
-                                        Console.WriteLine("ConsoleShowBooks or Autors? (b/a)");
+                                        Console.WriteLine("Books or Autors? (b/a)");
                                         switch (Console.ReadLine())
                                             {
                                                 case "b":
@@ -117,10 +116,10 @@ namespace BookWise
                                                 librarian.ConsoleDebtorsReaders();
                                                 break;
                                             case "2":
-                                                librarian.ReaderTookBooks();
+                                                librarian.ConsoleReaderTookBooks();
                                                 break;
                                             case "3":
-                                                librarian.HistoryOfBorrowing();
+                                                librarian.ConsoleHistoryOfBorrowing();
                                                 break;
                                         }
                                         break;
@@ -135,32 +134,30 @@ namespace BookWise
                             while (nenu)
                             {
                                 ReaderService.ShowReaderMenu();
-                                //var keyMenu = Console.ReadLine();
                                 switch (Console.ReadLine())
                                 {
                                     case "1":
-                                        reader.BorrowBook();
+                                        reader.ShowBooks(reader.BorrowBook());
 
                                         Console.WriteLine("Take a book?y/n");
                                         if (Console.ReadLine()=="y")
                                         {
                                             Console.WriteLine("What number?");
-                                            reader.TakeBook(Convert.ToInt32(Console.ReadLine()));
+                                            reader.ConsoleTakeBook(Convert.ToInt32(Console.ReadLine()));
                                         }
-                                        Console.WriteLine("Take a search book?y/n");
+                                        Console.WriteLine("Search book?y/n");
                                         if (Console.ReadLine() == "y")
                                         {
-                                            Console.WriteLine("SearchBoks by author(a), by title(t)(key somsth)");
-                                            reader.SearchBoks(Console.ReadLine(), Console.ReadLine());
+                                            Console.WriteLine("ConsoleSearchBoks by author(a), by title(t)(key somsth)");
+                                            reader.ConsoleSearchBoks(Console.ReadLine(), Console.ReadLine());
                                         }
                                             
                                         break;
                                     case "2":
                                         reader.AboutAuthors();
-                                       // Console.WriteLine("SearchBoks author?(y/n)");
                                         break;
                                     case "3":
-                                        reader.BorrowedBooks();
+                                        reader.ConsoleBorrowedBooks();
                                         break;
                                     case "4":
                                         reader.BorrowBook();
@@ -168,7 +165,7 @@ namespace BookWise
                                         try
                                         {
                                             int bookId = Convert.ToInt32(Console.ReadLine());
-                                            reader.TakeBook(bookId);
+                                            reader.ConsoleTakeBook(bookId);
                                         }
                                         catch
                                         {
@@ -219,98 +216,11 @@ namespace BookWise
                     }
                     while (key == "r")
                     {
-                        key = ReaderService.RegReader(ctx)? "b":"r";
+                        key = ReaderService.ConsoleRegReader(ctx)? "b":"r";
                     }
                 }
                 Console.WriteLine();
-            }
-            //Console.WriteLine("Hello, World!");
-            //newReader employee = new newReader()
-            //{
-            //    Login = "Max",
-            //    Password = "123",
-            //    Email = "max@library.com"
-            //};
-            //Reader reader = new Reader()
-            //{
-            //    Login = "Alinka",
-            //    Password = "3445",
-            //    Email = "Alina@library.com",
-            //    Name = "Alina",
-            //    LastName = "Vasilish",
-            //    DocumentTypeId = 2,
-            //    DocumentNumber = "AA123456"
-            //};
-            //Reader reader2 = new Reader()
-            //{
-            //    Login = "Коля",
-            //    Password = "3445",
-            //    Email = "кл@library.com",
-            //    Name = "Микола",
-            //    LastName = "Крус",
-            //    DocumentTypeId = 3,
-            //    DocumentNumber = "12312"
-            //};
-
-            //Author author = new Author()
-            //{
-            //    Name = " ",
-            //    LastName = " ",
-            //    SecondName = " ",
-            //    DateOfBirth = new DateTime(1888, 3, 4),
-            //    Book = new List<Book>() // можна додати список авторів
-            //    {
-            //        new Book()
-            //        { 
-            //            Name = "Книгап зі списку",
-            //            PublishingCodeId = 3
-            //            ,
-            //             Year = 2025, // рік публікації
-            //             Country = "Україна", // країна
-            //             City = "Київ" // місто
-            //        }
-            //    }
-
-            //};
-            //Book book = new Book()
-            //{
-            //    Name = "Книгап окремий клас",
-            //    ConsoleShowAuthors = new List<Author>() // можна додати список авторів
-            //    {
-            //        new Author() { Name = "Ya", LastName ="Kos",SecondName=" ", DateOfBirth = new DateTime(1992,1,1) },
-            //        new Author() { Name = "Mosy", LastName ="Kvold",SecondName=" ", DateOfBirth = new DateTime(1999,3,3) },
-            //        author
-            //    },
-            //    PublishingCodeId = 2,
-            //    //TypeOfPublishingCode = new PublishingCode
-            //    //{
-            //    //    Name = "ISBN"
-            //    //}, // замініть на відповідне значення коду публікації
-            //    Year = 2025, // рік публікації
-            //    Country = "Україна", // країна
-            //    City = "Київ" // місто
-            //};
-
-           
-           // using var ctx = new BooksContext();
-            //вщетукctx.Database.EnsureCreated();
-
-            //ctx.PublishingCodes.AddRange(
-            //new PublishingCode { Name = "ISBN" },
-            //new PublishingCode { Name = "ББК" },
-            //new PublishingCode { Name = "УДК" });
-
-            //ctx.DocumentTypes.AddRange(
-            //new DocumentType { Name = "Паспорт" },
-            //new DocumentType { Name = "Водійське посвідчення" },
-            //new DocumentType { Name = "ID-карта" });
-            //ctx.SaveChanges();
-            //ctx.Employees.Add(employee);
-            //ctx.Employees.Add(reader);
-            //ctx.ConsoleShowAuthors.Add(author);
-            //ctx.Book.Add(book);
-            //ctx.SaveChanges();
-            
+            } 
         }
     }
 }
