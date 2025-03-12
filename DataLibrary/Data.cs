@@ -13,6 +13,8 @@ namespace DataLibrary
         public DbSet<BorrowedBook> BorrowedBooks { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<PublishingCode> PublishingCodes { get; set; }
+        public BooksContext() { }
+        public BooksContext(DbContextOptions<BooksContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=WIN-JLM4T99KJ5L;Initial Catalog=BookWise;Integrated Security=True;Trust Server Certificate=True")
