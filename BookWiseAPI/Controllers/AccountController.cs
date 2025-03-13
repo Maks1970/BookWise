@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using DataLibrary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -75,7 +76,7 @@ namespace BookWiseAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly BooksContext _booksContext = new BooksContext();
+        private readonly BooksContext _booksContext;
         private readonly ITokenService _tokenService;
 
         public AccountController(BooksContext booksContext, ITokenService tokenService)
@@ -85,6 +86,7 @@ namespace BookWiseAPI.Controllers
         }
 
         [HttpPost("register/{userType}")]
+        [AllowAnonymous]
         public async Task<ActionResult> Register(string userType, AccounRegisterDto registerDto)
         {
             if(await _booksContext.Employees.AnyAsync(u=>u.Login== registerDto.login))
@@ -132,6 +134,7 @@ namespace BookWiseAPI.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(AccounLoginDto loginDto)
         {
             //var ss = _booksContext.Readers.Where(x => x.Login == "pas4").ToList()[0].Name;
