@@ -9,7 +9,7 @@ namespace DataLibrary
         public string LastName { get; set; }
         public string SecondName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        [JsonIgnore]
+         [JsonIgnore]
         public ICollection<Book> Books { get; set; }
 
     }
