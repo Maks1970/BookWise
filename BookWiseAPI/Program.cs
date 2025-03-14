@@ -28,8 +28,8 @@ namespace BookWiseAPI
             //    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
             //});
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IBooksService, BooksService>();
-
+            builder.Services.AddScoped<IBooksService, BookService>();
+            builder.Services.AddScoped<IBorrowedBooksByUser, BorrowedBooksByUser>();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt=>
                 {

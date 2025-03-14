@@ -19,14 +19,17 @@ namespace BookWiseAPI.Controllers
     {
         Task<ICollection<Book>> GetBooks();
     }
-
-    internal class BooksService : IBooksService
+    public interface IBorrowedBooksByUser
+    {
+        Task<ICollection<BorrowedBook>> GetBorrowedBooksByUserAsync(string token);
+    }
+    internal class BookService : IBooksService
     {
         private readonly BooksContext _booksContext;
 
-        public BooksService(BooksContext booksContext)
+        public BookService(BooksContext booksContext)
         {
-            _booksContext = booksContext;
+            _booksContext = booksContext; 
         }
         public async Task<ICollection<Book>> GetBooks()
         {
@@ -38,7 +41,41 @@ namespace BookWiseAPI.Controllers
         }
 
     }
+    public class BorrowedBooksByUser : IBorrowedBooksByUser
+    {
+        private readonly BooksContext _booksContext;
 
+        public BorrowedBooksByUser(BooksContext booksContext)
+        {
+            _booksContext = booksContext;
+        }
+
+        public async Task<ICollection<BorrowedBook>> GetBorrowedBooksByUserAsync(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var log = jwtToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId)?.Value;
+
+            if (string.IsNullOrEmpty(log)) return null;
+
+            var readerId = await _booksContext.Employees
+                .Where(u => u.Login == log)
+                .Select(u => u.Id)
+                .FirstOrDefaultAsync();
+
+            if (readerId == 0) return null;
+
+            var borrowedBooks = await _booksContext.BorrowedBooks
+                .Where(b => b.ReaderId == readerId)
+                .Include(b => b.Book)
+                .Include(r => r.Reader)
+                .Include(a => a.Book.Authors)
+                .Where(v => v.Reader != null)
+                .ToListAsync();
+
+            return borrowedBooks;
+        }
+    }
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Reader")]
@@ -47,10 +84,13 @@ namespace BookWiseAPI.Controllers
         private  BooksContext _booksContext;
        // private  ICollection<Book>? _books;
         private IBooksService _booksService;
-        public ReaderController(BooksContext booksContext, IBooksService booksService)
+        private  IBorrowedBooksByUser _borrowedBooksByUser;
+
+        public ReaderController(BooksContext booksContext, IBooksService booksService, IBorrowedBooksByUser borrowedBooksByUser)
         {
             _booksContext = booksContext;
             _booksService = booksService;
+            _borrowedBooksByUser = borrowedBooksByUser;
         }
 
         [HttpGet("Books")]
@@ -98,32 +138,54 @@ namespace BookWiseAPI.Controllers
         : NotFound("Author not found");
 
         [HttpGet("BorrowedBooksUser")]
-        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> BorrowedBooksByUser()
         {
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var log = jwtToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId)?.Value;
-            
-            var readerId = await _booksContext.Employees
-                                   .Where(u => u.Login == log)
-                                   .Select(u => u.Id)
-                                   .FirstOrDefaultAsync();
-
-            if (readerId == 0) 
-            {
-                return NotFound("User not found");
-            }
-            var borrowedBooks = await _booksContext.BorrowedBooks
-                .Where( b => b.ReaderId == readerId)
-                .Include(b => b.Book)
-                .Include(r => r.Reader)
-                .Include(a => a.Book.Authors)
-                .Where(v => v.Reader != null)
-                .ToListAsync();
+            var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(token);
             if (borrowedBooks == null || !borrowedBooks.Any()) { return NotFound("Book not found"); }
             return Ok(borrowedBooks);
         }
+        [HttpGet("ExpiredBooks")]
+        public async Task<IActionResult> ExpiredBooks()
+        {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(token);
+            var expiredBooks = borrowedBooks
+                .Where(b => b.DateForBorrowed < DateTime.Now && b.DateReturned == null)
+                .OrderBy(d => d.DateForBorrowed)
+                .ToList(); 
+
+            if (expiredBooks == null || !expiredBooks.Any())
+            {
+                return NotFound("Book not found");
+            }
+            return Ok(expiredBooks);
+
+        }
+        [HttpGet("WithouExpiredBooks")]
+        public async Task<IActionResult> WithouExpiredBooks()
+        {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(token);
+            var expiredBooks = await _booksContext.BorrowedBooks
+                .Where(b => b.DateForBorrowed < DateTime.Now && b.DateReturned == null)
+                .Select(b => b.Book.Name)  // Беремо тільки назви книг прострочених
+                .ToListAsync();
+
+            // Фільтруємо книги, яких немає в списку прострочених
+            var filteredBooks = borrowedBooks
+                .Where(b => !expiredBooks.Contains(b.Book.Name))  // Перевірка на наявність у списку прострочених
+                .ToList();
+
+
+            if (filteredBooks == null || !filteredBooks.Any())
+            {
+                return NotFound("No borrowed books found.");
+            }
+
+            return Ok(filteredBooks);
+
+        }
+
     }
 }
