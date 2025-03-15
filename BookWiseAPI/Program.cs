@@ -29,7 +29,7 @@ namespace BookWiseAPI
             //});
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IBooksService, BookService>();
-            builder.Services.AddScoped<IBorrowedBooksByUser, BorrowedBooksByUser>();
+            builder.Services.AddScoped<IBorrowedBooksByUserService, BorrowedBooksByUserService>();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt=>
                 {
