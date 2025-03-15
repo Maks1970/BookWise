@@ -9,6 +9,7 @@ using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using BookWiseAPI.Services.Interfaces;
 using System.Threading.Tasks.Dataflow;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace BookWiseAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace BookWiseAPI.Controllers
             return Ok(new
             {
                 User = Request.Headers["Authorization"].ToString().Replace("Bearer ", ""),
-            IsAuthenticated = User.Identity?.IsAuthenticated,
+                IsAuthenticated = User.Identity?.IsAuthenticated,
                 Roles = User.Claims.Where(c => c.Type == "role").Select(c => c.Value)
             });
         }
@@ -83,7 +84,7 @@ namespace BookWiseAPI.Controllers
             PublishingCode pubCod = _booksContext.PublishingCodes.FirstOrDefault(a => a.Name == bookDto.TypeOfPublishingCode.Name);
             if (pubCod == null)
             {
-                pubCod = new PublishingCode() { Name = bookDto.TypeOfPublishingCode.Name!};
+                pubCod = new PublishingCode() { Name = bookDto.TypeOfPublishingCode.Name! };
             }
             Book book = new Book()
             {
@@ -109,7 +110,7 @@ namespace BookWiseAPI.Controllers
         public async Task<IActionResult> UpdateBook(string findTitle, BookDto bookDto)
         {
             var existingBook = await _booksContext.Books.Include(b => b.Authors).FirstOrDefaultAsync(b => b.Name == findTitle);
-           
+
             if (existingBook == null)
             {
                 return NotFound("Book not found.");
@@ -118,10 +119,10 @@ namespace BookWiseAPI.Controllers
             {
                 existingBook.Name = bookDto.Title;
             }
-           
-            if (bookDto.Year!=default)
+
+            if (bookDto.Year != default)
             {
-                existingBook.Year = bookDto.Year?? existingBook.Year;
+                existingBook.Year = bookDto.Year ?? existingBook.Year;
             }
             if (!string.IsNullOrEmpty(bookDto.Country))
             {
@@ -139,9 +140,9 @@ namespace BookWiseAPI.Controllers
         }
 
         [HttpPost("AddAuthor")]
-        public async Task<IActionResult> AddAuthor( FulAuthorDto authorDto)
+        public async Task<IActionResult> AddAuthor(FulAuthorDto authorDto)
         {
-            var findAuthor = await _booksContext.Authors.FirstOrDefaultAsync(a=>a.Name==authorDto.Name && a.SecondName==authorDto.SecondName && a.LastName == authorDto.LastName && a.DateOfBirth == authorDto.DateOfBirth);
+            var findAuthor = await _booksContext.Authors.FirstOrDefaultAsync(a => a.Name == authorDto.Name && a.SecondName == authorDto.SecondName && a.LastName == authorDto.LastName && a.DateOfBirth == authorDto.DateOfBirth);
             if (findAuthor == null)
             {
                 Author author = new Author()
@@ -158,7 +159,60 @@ namespace BookWiseAPI.Controllers
         [HttpPatch("UpdateAuthor/{findAuthor}")]
         public async Task<IActionResult> UpdateAuthor(string findAuthor, FulAuthorDto bookDto)
         {
-            var s = await _authorUpdate.Update(findAuthor,bookDto);
+            var s = await _authorUpdate.Update(findAuthor, bookDto);
+            return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
+        }
+
+        [HttpDelete("DeleteAuthor")]
+        public async Task<IActionResult> DeleteAuthor(FulAuthorDto authorDto)
+        {
+            var findAuthor = await _booksContext.Authors.FirstOrDefaultAsync(a => a.Name == authorDto.Name && a.SecondName == authorDto.SecondName && a.LastName == authorDto.LastName && a.DateOfBirth == authorDto.DateOfBirth);
+            if (findAuthor != null) _booksContext.Authors.Remove(findAuthor);
+            return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
+        }
+        [HttpDelete("DeleteReader")]
+        public async Task<IActionResult> DeleteReader(string login)
+        {
+            var user = await _booksContext.Readers.FirstOrDefaultAsync(r => r.Login == login);
+            if (user != null) _booksContext.Readers.Remove(user);
+
+            return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
+        }
+        [HttpDelete("DeleteBook")]
+        public async Task<IActionResult> DeleteBook(string title)
+        {
+            var book = await _booksContext.Books.FirstOrDefaultAsync(b => b.Name == title);
+            if (book != null) _booksContext.Books.Remove(book);
+            return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
+        }
+        [HttpPost("AddBorrowedBook")]
+        public async Task<IActionResult> AddBorrowedBook(string login, string title)
+        {
+            var books = await _booksService.GetBooks();
+            var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
+            if (result == null || !result.Any()) 
+            {
+                BorrowedBook borrowedBook = new BorrowedBook()
+                {
+                    Reader = await _booksContext.Readers.FirstAsync(r => r.Login == login),
+                    Book = await _booksContext.Books.FirstAsync(b => b.Name == title),
+                    DateBorrowed = DateTime.Now,
+                };
+                _booksContext.BorrowedBooks.Add(borrowedBook);
+            }
+            return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
+        }
+        [HttpPut("ReturnBook")]
+        public async Task<IActionResult> ReturnBook( string title, DateTime dateReturn)
+        {
+            var books = await _booksService.GetBooks();
+            Book result = Task.Run(() => books.FirstOrDefault(b => b.Name.Contains(title))).Result;
+            if (result == null) return NotFound("Book not found");
+            var borrowBook = await _booksContext.BorrowedBooks.FirstOrDefaultAsync(b => b.Book == result);
+            if (borrowBook != null)
+            {
+                borrowBook.DateReturned = dateReturn;
+            }
             return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
         }
 
