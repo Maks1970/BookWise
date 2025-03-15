@@ -1,5 +1,7 @@
 
 using BookWiseAPI.Controllers;
+using BookWiseAPI.Services;
+using BookWiseAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +32,7 @@ namespace BookWiseAPI
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IBooksService, BookService>();
             builder.Services.AddScoped<IBorrowedBooksByUserService, BorrowedBooksByUserService>();
+            builder.Services.AddScoped<IAuthorUpdate, AuthorUpdateService>();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt=>
                 {

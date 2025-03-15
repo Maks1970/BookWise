@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using BookWiseAPI.Services.Interfaces;
+using System.Threading.Tasks.Dataflow;
+using System.Linq;
 
 namespace BookWiseAPI.Controllers
 {
@@ -15,11 +18,13 @@ namespace BookWiseAPI.Controllers
     public class LibrarianController : ControllerBase
     {
         private IBooksService _booksService;
+        private readonly IAuthorUpdate _authorUpdate;
         private BooksContext _booksContext;
 
-        public LibrarianController(BooksContext booksContext, IBooksService booksService)
+        public LibrarianController(BooksContext booksContext, IBooksService booksService, IAuthorUpdate authorUpdate)
         {
             _booksService = booksService;
+            _authorUpdate = authorUpdate;
             _booksContext = booksContext;
 
         }
@@ -103,7 +108,8 @@ namespace BookWiseAPI.Controllers
         [HttpPatch("UpdateBook/{findTitle}")]
         public async Task<IActionResult> UpdateBook(string findTitle, BookDto bookDto)
         {
-            var existingBook = await _booksContext.Books.FirstOrDefaultAsync(b => b.Name == findTitle);
+            var existingBook = await _booksContext.Books.Include(b => b.Authors).FirstOrDefaultAsync(b => b.Name == findTitle);
+           
             if (existingBook == null)
             {
                 return NotFound("Book not found.");
@@ -112,16 +118,7 @@ namespace BookWiseAPI.Controllers
             {
                 existingBook.Name = bookDto.Title;
             }
-            if (bookDto.Authors != null && bookDto.Authors.Any())
-            {
-                existingBook.Authors = bookDto.Authors.Select(x => new Author
-                {
-                    Name = x.Name,
-                    SecondName = x.SecondName,
-                    LastName = x.LastName,
-                    DateOfBirth = x.DateOfBirth
-                }).ToList();
-            }
+           
             if (bookDto.Year!=default)
             {
                 existingBook.Year = bookDto.Year?? existingBook.Year;
@@ -161,29 +158,7 @@ namespace BookWiseAPI.Controllers
         [HttpPatch("UpdateAuthor/{findAuthor}")]
         public async Task<IActionResult> UpdateAuthor(string findAuthor, FulAuthorDto bookDto)
         {
-            var result = Regex.Split(findAuthor, @"(?<=[а-яА-ЯёЁіІїЇєЄґҐA-Za-z])(?=[А-ЯA-Z])");
-            Author resAuthor = new Author();
-            if (result.Length == 3)
-            {
-                     resAuthor = await _booksContext.Authors
-                    .FirstOrDefaultAsync(a => a.Name.Contains(result[0]) && a.SecondName.Contains(result[1]) && a.LastName.Contains(result[2]));
-            }
-            else
-            {
-                // Розділення не вдалося, недостатньо елементів
-                return BadRequest("Invalid author format.");
-            }
-            if (resAuthor == null)
-            {
-                return NotFound("Author not found.");
-            }
-            resAuthor.Name = bookDto.Name ?? resAuthor.Name;
-            resAuthor.SecondName = bookDto.SecondName ?? resAuthor.SecondName;
-            resAuthor.LastName = bookDto.LastName ?? resAuthor.LastName;
-            if (bookDto.DateOfBirth != default)
-            {
-                resAuthor.DateOfBirth = bookDto.DateOfBirth;
-            }
+            var s = await _authorUpdate.Update(findAuthor,bookDto);
             return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
         }
 
