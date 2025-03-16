@@ -25,14 +25,14 @@ namespace BookWiseAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<DataLibrary.BooksContext>(opt =>
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("BookWiseDB")));
-            //builder.Services.AddControllers().AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-            //});
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IBooksService, BookService>();
             builder.Services.AddScoped<IBorrowedBooksByUserService, BorrowedBooksByUserService>();
             builder.Services.AddScoped<IAuthorUpdate, AuthorUpdateService>();
+            //builder.Services.AddControllers().AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            //});
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt=>
                 {

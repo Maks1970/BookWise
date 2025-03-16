@@ -43,28 +43,69 @@ namespace BookWiseAPI.Controllers
         public async Task<IActionResult> GetBooks()
         {
             var books = await _booksService.GetBooks();
-            return Ok(books);
+            var booksDTO = books.Select(book => new BookDTO
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Authors = book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList()
+            }).ToList();
+            return Ok(booksDTO);
         }
 
-        [HttpGet("BookByAuthors")]
+        [HttpGet("BooksByAuthors")]
         public async Task<IActionResult> BookByAuthors(AuthorDto authorDto)
         {
-            var books = await _booksService.GetBooks();
-            var result = await Task.Run(() => books.Where(book =>
+            var result = (await _booksService.GetBooks())
+                .Where(book =>
                         book.Authors
                             .Any(a => a.Name.Contains(authorDto.Name) &&
                             a.LastName.Contains(authorDto.LastName) &&
-                            a.SecondName.Contains(authorDto.SecondName))));
-            return Ok(result);
+                            a.SecondName.Contains(authorDto.SecondName)));
+            var booksDTO = result.Select(book => new BookDTO
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Authors = book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList()
+            }).ToList();
+            return Ok(booksDTO);
         }
 
         [HttpGet("BookByTitle")]
         public async Task<IActionResult> BoksByTitle(string title)
         {
-            var books = await _booksService.GetBooks();
-            var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
+            //var books = await _booksService.GetBooks();
+            //var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
+            var result = (await _booksService.GetBooks())
+                .Where(b => b.Name.Contains(title));
             if (result == null || !result.Any()) { return NotFound("Book not found"); }
-            return Ok(result);
+            var booksDTO = result.Select(book => new BookDTO
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Authors = book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList()
+            }).ToList();
+            return Ok(booksDTO);
         }
         [HttpGet("Authors")]
         public async Task<IActionResult> GetAuthors()
@@ -188,9 +229,11 @@ namespace BookWiseAPI.Controllers
         [HttpPost("AddBorrowedBook")]
         public async Task<IActionResult> AddBorrowedBook(string login, string title)
         {
-            var books = await _booksService.GetBooks();
-            var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
-            if (result == null || !result.Any()) 
+            //var books = await _booksService.GetBooks();
+            //var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
+            var result = (await _booksService.GetBooks())
+                .Where(b => b.Name.Contains(title));
+            if (result == null || !result.Any())
             {
                 BorrowedBook borrowedBook = new BorrowedBook()
                 {
@@ -202,11 +245,13 @@ namespace BookWiseAPI.Controllers
             }
             return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
         }
-        [HttpPut("ReturnBook")]
-        public async Task<IActionResult> ReturnBook( string title, DateTime dateReturn)
+        [HttpPatch("ReturnBook")]
+        public async Task<IActionResult> ReturnBook(string title, DateTime dateReturn)
         {
-            var books = await _booksService.GetBooks();
-            Book result = Task.Run(() => books.FirstOrDefault(b => b.Name.Contains(title))).Result;
+            //var books = await _booksService.GetBooks();
+            //Book result = Task.Run(() => books.FirstOrDefault(b => b.Name.Contains(title))).Result;
+            var result = (await _booksService.GetBooks())
+                .FirstOrDefault(b => b.Name.Contains(title));
             if (result == null) return NotFound("Book not found");
             var borrowBook = await _booksContext.BorrowedBooks.FirstOrDefaultAsync(b => b.Book == result);
             if (borrowBook != null)
@@ -215,6 +260,30 @@ namespace BookWiseAPI.Controllers
             }
             return await _booksContext.SaveChangesAsync() > 0 ? Ok() : BadRequest();
         }
+        [HttpGet("GetDebtorsReaders")]
+        public async Task<IActionResult> GetDebtorsReaders() 
+        {
+            var borr = await _booksService.BorrowingHistory();
+            var res = borr.Where(r => r.BorrowedBooks.Any(b => b.DateReturned == null));
+            return Ok(res);
+        }
 
+        [HttpGet("GetBorrowingHistory")]
+        public async Task<IActionResult> GetBorrowingHistory() =>Ok(await _booksService.BorrowingHistory());
+        [HttpGet("GetBorrowingHistoryUser")]
+        public async Task<IActionResult> GetBorrowingHistoryUser(string login)
+        {
+            var borr = await _booksService.BorrowingHistory();
+            var historyBorriwingUser = borr.Where(u => u.Login == login)  // Фільтруємо користувача за логіном
+                    .SelectMany(u => u.BorrowedBooks)  // Розгортаємо список позичених книг
+                    .OrderBy(b => b.DateBorrowed)  // Сортуємо за датою позичання
+                    .ToList();  
+            if (historyBorriwingUser != null){
+                int countOverdue = historyBorriwingUser.Count(b => b.DateForBorrowed < DateTime.Now && b.DateReturned == null);
+                BorrowingHistoryUserDto reader = new BorrowingHistoryUserDto(historyBorriwingUser, countOverdue);
+                return Ok(reader);
+            }
+            return BadRequest();
+        }
     }
 }

@@ -36,7 +36,21 @@ namespace BookWiseAPI.Controllers
         public async Task<IActionResult> GetBooks()
         {
             var books = await _booksService.GetBooks();
-            return Ok(books);
+
+            var booksDTO = books.Select(book => new BookDTO
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Authors = book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList()
+            }).ToList();
+            return Ok(booksDTO);
         }
         [HttpGet("BookByAuthors")]
         public async Task<IActionResult> BookByAuthors(FulAuthorDto authorDto)
@@ -47,7 +61,21 @@ namespace BookWiseAPI.Controllers
                             .Any(a => a.Name.Contains(authorDto.Name) &&
                             a.LastName.Contains(authorDto.LastName) &&
                             a.SecondName.Contains(authorDto.SecondName))));
-            return Ok(result);
+
+            var booksDTO = result.Select(book => new BookDTO
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Authors = book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList()
+            }).ToList();
+            return Ok(booksDTO);
         }
         [HttpGet("BookByTitle")]
         public async Task<IActionResult> BoksByTitle(string title)
@@ -57,10 +85,22 @@ namespace BookWiseAPI.Controllers
 
             var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
             if (result == null|| !result.Any()) { return NotFound("Book not found"); }
-            
+            var booksDTO = result.Select(book => new BookDTO
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Authors = book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList()
+            }).ToList();
             //await _books.Where(b => b.Name.Contains(value));
 
-            return Ok(result);
+            return Ok(booksDTO);
         }
 
         [HttpGet("Authors")]
@@ -80,7 +120,23 @@ namespace BookWiseAPI.Controllers
         {
             var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(Request.Headers["Authorization"].ToString().Replace("Bearer ", ""));
             if (borrowedBooks == null || !borrowedBooks.Any()) { return NotFound("Book not found"); }
-            return Ok(borrowedBooks);
+            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDTO
+            {
+                Id = book.Id,
+                Name = book.Book.Name,
+                Authors = book.Book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList(),
+                DateBorrowed = book.DateBorrowed,
+                DateForBorrowed = book.DateForBorrowed,
+                DateReturned = book.DateReturned
+            }).ToList();
+            return Ok(booksDTO);
         }
         [HttpGet("ExpiredBooks")]
         public async Task<IActionResult> ExpiredBooks()
@@ -95,10 +151,26 @@ namespace BookWiseAPI.Controllers
             {
                 return NotFound("Book not found");
             }
-            return Ok(expiredBooks);
+            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDTO
+            {
+                Id = book.Id,
+                Name = book.Book.Name,
+                Authors = book.Book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList(),
+                DateBorrowed = book.DateBorrowed,
+                DateForBorrowed = book.DateForBorrowed,
+                DateReturned = book.DateReturned
+            }).ToList();
+            return Ok(booksDTO);
 
         }
-        [HttpGet("WithouExpiredBooks")]
+        [HttpGet("WithoutExpiredBooks")]
         public async Task<IActionResult> WithouExpiredBooks()
         {
             var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(Request.Headers["Authorization"].ToString().Replace("Bearer ", ""));
@@ -115,7 +187,23 @@ namespace BookWiseAPI.Controllers
             {
                 return NotFound("No borrowed books found.");
             }
-            return Ok(filteredBooks);
+            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDTO
+            {
+                Id = book.Id,
+                Name = book.Book.Name,
+                Authors = book.Book.Authors.Select(author => new AuthorDTO
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    LastName = author.LastName,
+                    SecondName = author.SecondName,
+                    DateOfBirth = author.DateOfBirth
+                }).ToList(),
+                DateBorrowed = book.DateBorrowed,
+                DateForBorrowed = book.DateForBorrowed,
+                DateReturned = book.DateReturned
+            }).ToList();
+            return Ok(booksDTO);
         }
         [HttpPost("TakeBook")]
         public async Task<IActionResult> TakeBook(TakeBookDto takeBook)
