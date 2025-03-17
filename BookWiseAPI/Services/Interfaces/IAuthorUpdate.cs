@@ -5,6 +5,6 @@ namespace BookWiseAPI.Services.Interfaces
 {
     public interface IAuthorUpdate
     {
-        Task<Author> Update(string findAuthor,FulAuthorDto authorDto);
+        Task<Author> Update(string findAuthor, AuthorDto authorDto);
     }
 }

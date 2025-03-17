@@ -32,28 +32,31 @@ namespace BookWiseAPI.Controllers
         }
 
         [HttpGet("Books")]
-        //[Authorize(Roles ="Reader")]
         public async Task<IActionResult> GetBooks()
         {
             var books = await _booksService.GetBooks();
 
-            var booksDTO = books.Select(book => new BookDTO
+            var booksDTO = books.Select(book => new BookDto
             {
                 Id = book.Id,
                 Name = book.Name,
-                Authors = book.Authors.Select(author => new AuthorDTO
+                Authors = book.Authors.Select(author => new AuthorDto
                 {
-                    Id = author.Id,
                     Name = author.Name,
                     LastName = author.LastName,
                     SecondName = author.SecondName,
                     DateOfBirth = author.DateOfBirth
-                }).ToList()
+                }).ToList(),
+                TypeOfPublishingCode = book.TypeOfPublishingCode,
+                Year = book.Year,
+                Country = book.Country,
+                City = book.City,
+                DaysBorrowed = book.DaysBorrowed
             }).ToList();
             return Ok(booksDTO);
         }
         [HttpGet("BookByAuthors")]
-        public async Task<IActionResult> BookByAuthors(FulAuthorDto authorDto)
+        public async Task<IActionResult> BookByAuthors(AuthorDto authorDto)
         {
             var books = await _booksService.GetBooks();
             var result = await Task.Run(()=> books.Where(book =>
@@ -62,18 +65,22 @@ namespace BookWiseAPI.Controllers
                             a.LastName.Contains(authorDto.LastName) &&
                             a.SecondName.Contains(authorDto.SecondName))));
 
-            var booksDTO = result.Select(book => new BookDTO
+            var booksDTO = result.Select(book => new BookDto
             {
                 Id = book.Id,
                 Name = book.Name,
-                Authors = book.Authors.Select(author => new AuthorDTO
+                Authors = book.Authors.Select(author => new AuthorDto
                 {
-                    Id = author.Id,
                     Name = author.Name,
                     LastName = author.LastName,
                     SecondName = author.SecondName,
                     DateOfBirth = author.DateOfBirth
-                }).ToList()
+                }).ToList(),
+                TypeOfPublishingCode = book.TypeOfPublishingCode,
+                Year = book.Year,
+                Country = book.Country,
+                City = book.City,
+                DaysBorrowed = book.DaysBorrowed
             }).ToList();
             return Ok(booksDTO);
         }
@@ -81,25 +88,25 @@ namespace BookWiseAPI.Controllers
         public async Task<IActionResult> BoksByTitle(string title)
         {
             var books = await _booksService.GetBooks();
-           // if (_books == null) _books = await _booksService.GetBooks(_booksContext);
-
             var result = await Task.Run(() => books.Where(b => b.Name.Contains(title)));
             if (result == null|| !result.Any()) { return NotFound("Book not found"); }
-            var booksDTO = result.Select(book => new BookDTO
+            var booksDTO = result.Select(book => new BookDto
             {
                 Id = book.Id,
                 Name = book.Name,
-                Authors = book.Authors.Select(author => new AuthorDTO
+                Authors = book.Authors.Select(author => new AuthorDto
                 {
-                    Id = author.Id,
                     Name = author.Name,
                     LastName = author.LastName,
                     SecondName = author.SecondName,
                     DateOfBirth = author.DateOfBirth
-                }).ToList()
+                }).ToList(),
+                TypeOfPublishingCode = book.TypeOfPublishingCode,
+                Year = book.Year,
+                Country = book.Country,
+                City = book.City,
+                DaysBorrowed = book.DaysBorrowed
             }).ToList();
-            //await _books.Where(b => b.Name.Contains(value));
-
             return Ok(booksDTO);
         }
 
@@ -120,13 +127,12 @@ namespace BookWiseAPI.Controllers
         {
             var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(Request.Headers["Authorization"].ToString().Replace("Bearer ", ""));
             if (borrowedBooks == null || !borrowedBooks.Any()) { return NotFound("Book not found"); }
-            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDTO
+            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDto
             {
                 Id = book.Id,
                 Name = book.Book.Name,
-                Authors = book.Book.Authors.Select(author => new AuthorDTO
+                Authors = book.Book.Authors.Select(author => new AuthorDto
                 {
-                    Id = author.Id,
                     Name = author.Name,
                     LastName = author.LastName,
                     SecondName = author.SecondName,
@@ -151,13 +157,12 @@ namespace BookWiseAPI.Controllers
             {
                 return NotFound("Book not found");
             }
-            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDTO
+            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDto
             {
                 Id = book.Id,
                 Name = book.Book.Name,
-                Authors = book.Book.Authors.Select(author => new AuthorDTO
+                Authors = book.Book.Authors.Select(author => new AuthorDto
                 {
-                    Id = author.Id,
                     Name = author.Name,
                     LastName = author.LastName,
                     SecondName = author.SecondName,
@@ -176,24 +181,22 @@ namespace BookWiseAPI.Controllers
             var borrowedBooks = await _borrowedBooksByUser.GetBorrowedBooksByUserAsync(Request.Headers["Authorization"].ToString().Replace("Bearer ", ""));
             var expiredBooks = await _booksContext.BorrowedBooks
                 .Where(b => b.DateForBorrowed < DateTime.Now && b.DateReturned == null)
-                .Select(b => b.Book.Name)  // Беремо тільки назви книг прострочених
+                .Select(b => b.Book.Name)  
                 .ToListAsync();
 
-            // Фільтруємо книги, яких немає в списку прострочених
             var filteredBooks = borrowedBooks
-                .Where(b => !expiredBooks.Contains(b.Book.Name))  // Перевірка на наявність у списку прострочених
+                .Where(b => !expiredBooks.Contains(b.Book.Name))
                 .ToList();
             if (filteredBooks == null || !filteredBooks.Any())
             {
                 return NotFound("No borrowed books found.");
             }
-            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDTO
+            var booksDTO = borrowedBooks.Select(book => new BorrowedBookDto
             {
                 Id = book.Id,
                 Name = book.Book.Name,
-                Authors = book.Book.Authors.Select(author => new AuthorDTO
+                Authors = book.Book.Authors.Select(author => new AuthorDto
                 {
-                    Id = author.Id,
                     Name = author.Name,
                     LastName = author.LastName,
                     SecondName = author.SecondName,

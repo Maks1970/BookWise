@@ -14,7 +14,7 @@ namespace BookWiseAPI.Services
         {
             _booksContext = booksContext;
         }
-        public async Task<Author> Update(string findAuthor,FulAuthorDto authorDto)
+        public async Task<Author> Update(string findAuthor, AuthorDto authorDto)
         {
             var result = Regex.Split(findAuthor, @"(?<=[а-яА-ЯёЁіІїЇєЄґҐA-Za-z])(?=[А-ЯA-Z])");
             Author resAuthor = new Author();
@@ -26,7 +26,6 @@ namespace BookWiseAPI.Services
             }
             else
             {
-                // Розділення не вдалося, недостатньо елементів
                 throw new ArgumentException("Invalid author format.");
             }
             if (resAuthor != null)
@@ -40,7 +39,6 @@ namespace BookWiseAPI.Services
                 }
             }
 
-            //await _booksContext.SaveChangesAsync();
             return   resAuthor;
         }
     }

@@ -21,29 +21,29 @@ namespace BookWiseAPI.Controllers
                     .ToListAsync();
         }
 
-        async Task<ICollection<ReaderDTO>> IBooksService.BorrowingHistory()
+        async Task<ICollection<ReaderDto>> IBooksService.BorrowingHistory()
         {
             var readers = await _booksContext.BorrowedBooks
-         .Include(bb => bb.Reader)  // Включаємо дані читача
-         .Include(bb => bb.Book)  // Включаємо дані книги
-         .ThenInclude(b => b.Authors)  // Включаємо авторів книги
-         .Select(bb => new ReaderDTO
+         .Include(bb => bb.Reader) 
+         .Include(bb => bb.Book)
+         .ThenInclude(b => b.Authors) 
+         .Select(bb => new ReaderDto
          {
-             Login = bb.Reader.Login,  // Логін читача
-             BorrowedBooks = new List<BorrowedBookDTO>
+             Login = bb.Reader.Login,
+             BorrowedBooks = new List<BorrowedBookDto>
              {
-                new BorrowedBookDTO
+                new BorrowedBookDto
                 {
-                    Name = bb.Book.Name,  // Назва книги
-                    Authors = bb.Book.Authors.Select(a => new AuthorDTO
+                    Name = bb.Book.Name, 
+                    Authors = bb.Book.Authors.Select(a => new AuthorDto
                     {
-                        Name = a.Name,  // Ім'я автора
-                        LastName = a.LastName,  // Прізвище автора
-                        SecondName = a.SecondName  // По батькові автора
+                        Name = a.Name,  
+                        LastName = a.LastName,  
+                        SecondName = a.SecondName 
                     }).ToList(),
-                    DateBorrowed = bb.DateBorrowed,  // Дата позичання
-                    DateForBorrowed = bb.DateForBorrowed,  // Дата, коли книга мала бути повернена
-                    DateReturned = bb.DateReturned  // Дата повернення (може бути null)
+                    DateBorrowed = bb.DateBorrowed, 
+                    DateForBorrowed = bb.DateForBorrowed,  
+                    DateReturned = bb.DateReturned 
                 }
              }
          }).ToListAsync();

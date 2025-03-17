@@ -2,5 +2,5 @@
 
 namespace BookWiseAPI.Controllers
 {
-    public record TakeBookDto(string Title, ICollection<FulAuthorDto> Authors);
+    public record TakeBookDto(string Title, ICollection<AuthorDto> Authors);
 }

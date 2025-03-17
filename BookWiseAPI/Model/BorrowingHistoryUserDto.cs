@@ -2,7 +2,7 @@
 
 namespace BookWiseAPI.Model
 {
-    public record BorrowingHistoryUserDto(ICollection<BorrowedBookDTO> BorrowedBooks,int? countOverdue)
+    public record BorrowingHistoryUserDto(ICollection<BorrowedBookDto> BorrowedBooks,int? countOverdue)
     {
     }
 }

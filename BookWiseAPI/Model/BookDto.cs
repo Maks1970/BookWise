@@ -2,14 +2,15 @@
 
 namespace BookWiseAPI.Model
 {
-    public record BookDto()
+    public class BookDto
     {
-        public string? Title { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<AuthorDto> Authors { get; set; }
         public PublishingCode? TypeOfPublishingCode { get; set; }
-        public ICollection<FulAuthorDto>? Authors { get; set; }
         public int? Year { get; set; }
         public string? Country { get; set; }
         public string? City { get; set; }
         public int? DaysBorrowed { get; set; }
-    };
+    }
 }
