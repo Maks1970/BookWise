@@ -1,0 +1,1111 @@
+{
+	"info": {
+		"_postman_id": "8446c0bc-8d44-444d-9b55-c5853a99374d",
+		"name": "BookWiseAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43018490"
+	},
+	"item": [
+		{
+			"name": "Reader",
+			"item": [
+				{
+					"name": "Books",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/Books",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"Books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookByTitle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/BookByTitle",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"BookByTitle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookByAuthorsf",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/BookByAuthors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"BookByAuthors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AllAuthors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE4NzIwOTAsImV4cCI6MTc0MjMwNDA5MCwiaWF0IjoxNzQxODcyMDkwfQ.JUviK5VkySwiyQ6-IwuzmEBBe9aL2_LgoOUIDgA2pvWv0HTkTcvJsejSzvKlx7AX18wKKezLG2NILU5GGgII3g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/Authors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"Authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorsByName",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE4NzIwOTAsImV4cCI6MTc0MjMwNDA5MCwiaWF0IjoxNzQxODcyMDkwfQ.JUviK5VkySwiyQ6-IwuzmEBBe9aL2_LgoOUIDgA2pvWv0HTkTcvJsejSzvKlx7AX18wKKezLG2NILU5GGgII3g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/Authors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"Authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BorrowedBooksByUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/BorrowedBooksUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"BorrowedBooksUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BorrowedBooksWithouExpiredByUser Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/WithoutExpiredBooks",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"WithoutExpiredBooks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExpiredBooksByUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/BorrowedBooksUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"BorrowedBooksUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TakeBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJsb2c0IiwiZW1haWwiOiJsb2c0QGdnLmNvbSIsInJvbGUiOiJSZWFkZXIiLCJuYmYiOjE3NDE5MDc0NDEsImV4cCI6MTc0MjMzOTQ0MSwiaWF0IjoxNzQxOTA3NDQxfQ.tD4YxmjHHVy71OmPYCcGYl8SrYMZZyrvyoJV2KHCTSMRQdZBePBgOd9s5FY3jDqBXbJD9eO3Ms6jUF4DGYjkrg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Home\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": 1015,\r\n      \"name\": \"Max\",\r\n      \"lastName\": \"pol\",\r\n      \"secondName\": \"lop\"\r\n    },\r\n    {\r\n      \"id\": 1016,\r\n      \"name\": \"kop\",\r\n      \"lastName\": \"pok\",\r\n      \"secondName\": \"kp\"\r\n    }\r\n  ],\r\n  \"publishingCodeId\": 1,\r\n  \"typeOfPublishingCode\": {\r\n    \"publishingCodeId\": 1,\r\n    \"name\": \"ISBN\"\r\n  },\r\n  \"year\": 2007,\r\n  \"country\": \"Ukrainian\",\r\n  \"city\": \"Khmelnytskyi\",\r\n  \"daysBorrowed\": 50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Reader/TakeBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Reader",
+								"TakeBook"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Librarian",
+			"item": [
+				{
+					"name": "RegisterReader",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"log9\",\r\n  \"password\": \"pas9\",\r\n  \"email\": \"asdas@i.ua\",\r\n  \"name\": \"Pol\",\r\n  \"lastName\": \"Muzar\",\r\n   \"documentId\": 1,\r\n  \"documentNumber\": \"sdasda\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Account/register/Reader",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Account",
+								"register",
+								"Reader"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"log4\",\r\n  \"password\": \"pas4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Account/Login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Account",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/GetDebtorsReaders",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"GetDebtorsReaders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookByAuthors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n                \"name\": \"kop\",\r\n                \"lastName\": \"pok\",\r\n                \"secondName\": \"kp\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/BooksByAuthors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"BooksByAuthors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookByTitle",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/BookByAuthors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"BookByAuthors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/Authors",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"Authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorsByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/AuthorsByName",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"AuthorsByName"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDebtorsReaders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/GetDebtorsReaders",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"GetDebtorsReaders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBorrowingHistory",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/GetBorrowingHistory",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"GetBorrowingHistory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBorrowingHistoryUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/GetBorrowingHistoryUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"GetBorrowingHistoryUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Title\": \"V2.1APi\",\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Max\",\r\n      \"lastName\": \"Max\",\r\n      \"secondName\": \"Max\",\r\n      \"dateOfBirth\": \"2002-03-15T08:35:31.138Z\"\r\n    }\r\n  ],\r\n  \"typeOfPublishingCode\": {\r\n    \"name\": \"ISBN\"\r\n  },\r\n  \"year\": 2015,\r\n  \"country\": \"UKranian\",\r\n  \"city\": \"Shep\",\r\n  \"daysBorrowed\": 90\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/AddBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"AddBook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddAuthor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/AddAuthor",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"AddAuthor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddBorrowedBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/AddBorrowedBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"AddBorrowedBook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReturnBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/ReturnBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"ReturnBook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAythor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \" Alina\",\r\n  \"lastName\": \"Zara\",\r\n  \"secondName\": \"Vas\",\r\n  \"dateOfBirth\": \"1990-03-15T11:41:24.335Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/UpdateAuthor/ZaraAlinaVas",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"UpdateAuthor",
+								"ZaraAlinaVas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Home\",\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Max\",\r\n      \"lastName\": \"аааааа\",\r\n      \"secondName\": \"ааааааааа\",\r\n      \"dateOfBirth\": \"2000-02-22T00:00:00.0000000\"\r\n    },\r\n    {\r\n      \"name\": \"kop\",\r\n      \"lastName\": \"pok\",\r\n      \"secondName\": \"kp\",\r\n      \"dateOfBirth\": \"1990-12-12T00:00:00.0000000\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/UpdateBook/V2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"UpdateBook",
+								"V2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteAuthor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Home\",\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Max\",\r\n      \"lastName\": \"аааааа\",\r\n      \"secondName\": \"ааааааааа\",\r\n      \"dateOfBirth\": \"2000-02-22T00:00:00.0000000\"\r\n    },\r\n    {\r\n      \"name\": \"kop\",\r\n      \"lastName\": \"pok\",\r\n      \"secondName\": \"kp\",\r\n      \"dateOfBirth\": \"1990-12-12T00:00:00.0000000\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/DeleteAuthor",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"DeleteAuthor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteReader",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Home\",\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Max\",\r\n      \"lastName\": \"аааааа\",\r\n      \"secondName\": \"ааааааааа\",\r\n      \"dateOfBirth\": \"2000-02-22T00:00:00.0000000\"\r\n    },\r\n    {\r\n      \"name\": \"kop\",\r\n      \"lastName\": \"pok\",\r\n      \"secondName\": \"kp\",\r\n      \"dateOfBirth\": \"1990-12-12T00:00:00.0000000\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/DeleteReader",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"DeleteReader"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJNYXgiLCJlbWFpbCI6Im1heEBsaWJyYXJ5LmNvbSIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTc0MjAyOTcwMiwiZXhwIjoxNzQyNDYxNzAyLCJpYXQiOjE3NDIwMjk3MDJ9.4BjO1VKwJULnDW8Lgv41QVZlbFtfRVX9AoBlE_XMB8eG-qk-6x8gCuesohovyeygDMt9R-5HFYnH9JbtmOIZSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Home\",\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Max\",\r\n      \"lastName\": \"аааааа\",\r\n      \"secondName\": \"ааааааааа\",\r\n      \"dateOfBirth\": \"2000-02-22T00:00:00.0000000\"\r\n    },\r\n    {\r\n      \"name\": \"kop\",\r\n      \"lastName\": \"pok\",\r\n      \"secondName\": \"kp\",\r\n      \"dateOfBirth\": \"1990-12-12T00:00:00.0000000\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7023/api/Librarian/DeleteBook",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7023",
+							"path": [
+								"api",
+								"Librarian",
+								"DeleteBook"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

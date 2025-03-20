@@ -9,8 +9,8 @@ namespace BookWise
         static void Main(string[] args)
         {
             bool nenu = true;
-           // Console.ResetColor();
             using var ctx = new BooksContext();
+
             while (true) 
             {
                 Console.WriteLine("login(l) or Register(r)");
@@ -26,6 +26,7 @@ namespace BookWise
                         .FirstOrDefault(l => EF.Functions.Collate(l.Login, "SQL_Latin1_General_CP1_CS_AS") == login);
                     if (user != null && user.Password == pass)
                     {
+                        var s = user.GetType().Name;
                         string discriminator = ctx.Entry(user).Property("Discriminator").CurrentValue as string;
                         if (discriminator == "Employee")
                         {
@@ -42,12 +43,12 @@ namespace BookWise
                                         switch (Console.ReadLine())
                                         {
                                             case "b":
-                                                librarian.Books();
+                                                librarian.ConsoleShowBooks();
                                                 Console.WriteLine("Search a/b?");
                                                 librarian.SearchBoks(Console.ReadLine(),Console.ReadLine());
                                                 break;
                                             case "a":
-                                                librarian.Authors();
+                                                librarian.ConsoleShowAuthors();
                                                 break;
                                         }
                                         break;
@@ -60,10 +61,10 @@ namespace BookWise
                                             switch (Console.ReadLine())
                                             {
                                                 case "b":
-                                                    librarian.AddBooks();
+                                                    librarian.ConsoleAddBooks();
                                                     break;
                                                 case "a":
-                                                    librarian.AddAuthor();
+                                                    librarian.ConsoleAddAuthor();
                                                     break;
                                                 default:
                                                     addKey = false;
@@ -80,7 +81,7 @@ namespace BookWise
                                                     librarian.UpdateBooks();
                                                     break;
                                                 case "a":
-                                                librarian.UpdateAuthor();
+                                                librarian.ConsoleUpdateAuthor();
                                                 break;
                                                 default:
                                                     addKey = false;
@@ -103,7 +104,7 @@ namespace BookWise
                                                 break;
                                             case "delete":
                                                 Console.WriteLine("Wat login");
-                                                librarian.DeleteReader(Console.ReadLine());
+                                                librarian.ConsoleDeleteReader(Console.ReadLine());
                                                 break;
                                         }
                                         break;
@@ -114,13 +115,13 @@ namespace BookWise
                                         switch (Console.ReadLine())
                                         {
                                             case "1":
-                                                librarian.DebtorsReaders();
+                                                librarian.ConsoleDebtorsReaders();
                                                 break;
                                             case "2":
-                                                librarian.ReaderTookBooks();
+                                                librarian.ConsoleReaderTookBooks();
                                                 break;
                                             case "3":
-                                                librarian.HistoryOfBorrowing();
+                                                librarian.ConsoleHistoryOfBorrowing();
                                                 break;
                                         }
                                         break;
@@ -135,32 +136,30 @@ namespace BookWise
                             while (nenu)
                             {
                                 ReaderService.ShowReaderMenu();
-                                //var keyMenu = Console.ReadLine();
                                 switch (Console.ReadLine())
                                 {
                                     case "1":
-                                        reader.BorrowBook();
+                                        reader.ShowBooks(reader.BorrowBook());
 
                                         Console.WriteLine("Take a book?y/n");
                                         if (Console.ReadLine()=="y")
                                         {
                                             Console.WriteLine("What number?");
-                                            reader.TakeBook(Convert.ToInt32(Console.ReadLine()));
+                                            reader.ConsoleTakeBook(Convert.ToInt32(Console.ReadLine()));
                                         }
-                                        Console.WriteLine("Take a search book?y/n");
+                                        Console.WriteLine("Search book?y/n");
                                         if (Console.ReadLine() == "y")
                                         {
-                                            Console.WriteLine("SearchBoks by author(a), by title(t)(key somsth)");
-                                            reader.SearchBoks(Console.ReadLine(), Console.ReadLine());
+                                            Console.WriteLine("ConsoleSearchBoks by author(a), by title(t)(key somsth)");
+                                            reader.ConsoleSearchBoks(Console.ReadLine(), Console.ReadLine());
                                         }
                                             
                                         break;
                                     case "2":
                                         reader.AboutAuthors();
-                                       // Console.WriteLine("SearchBoks author?(y/n)");
                                         break;
                                     case "3":
-                                        reader.BorrowedBooks();
+                                        reader.ConsoleBorrowedBooks();
                                         break;
                                     case "4":
                                         reader.BorrowBook();
@@ -168,7 +167,7 @@ namespace BookWise
                                         try
                                         {
                                             int bookId = Convert.ToInt32(Console.ReadLine());
-                                            reader.TakeBook(bookId);
+                                            reader.ConsoleTakeBook(bookId);
                                         }
                                         catch
                                         {
@@ -219,98 +218,11 @@ namespace BookWise
                     }
                     while (key == "r")
                     {
-                        key = ReaderService.RegReader(ctx)? "b":"r";
+                        key = ReaderService.ConsoleRegReader(ctx)? "b":"r";
                     }
                 }
                 Console.WriteLine();
-            }
-            //Console.WriteLine("Hello, World!");
-            //newReader employee = new newReader()
-            //{
-            //    Login = "Max",
-            //    Password = "123",
-            //    Email = "max@library.com"
-            //};
-            //Reader reader = new Reader()
-            //{
-            //    Login = "Alinka",
-            //    Password = "3445",
-            //    Email = "Alina@library.com",
-            //    Name = "Alina",
-            //    LastName = "Vasilish",
-            //    DocumentTypeId = 2,
-            //    DocumentNumber = "AA123456"
-            //};
-            //Reader reader2 = new Reader()
-            //{
-            //    Login = "Коля",
-            //    Password = "3445",
-            //    Email = "кл@library.com",
-            //    Name = "Микола",
-            //    LastName = "Крус",
-            //    DocumentTypeId = 3,
-            //    DocumentNumber = "12312"
-            //};
-
-            //Author author = new Author()
-            //{
-            //    Name = " ",
-            //    LastName = " ",
-            //    SecondName = " ",
-            //    DateOfBirth = new DateTime(1888, 3, 4),
-            //    Book = new List<Book>() // можна додати список авторів
-            //    {
-            //        new Book()
-            //        { 
-            //            Name = "Книгап зі списку",
-            //            PublishingCodeId = 3
-            //            ,
-            //             Year = 2025, // рік публікації
-            //             Country = "Україна", // країна
-            //             City = "Київ" // місто
-            //        }
-            //    }
-
-            //};
-            //Book book = new Book()
-            //{
-            //    Name = "Книгап окремий клас",
-            //    Authors = new List<Author>() // можна додати список авторів
-            //    {
-            //        new Author() { Name = "Ya", LastName ="Kos",SecondName=" ", DateOfBirth = new DateTime(1992,1,1) },
-            //        new Author() { Name = "Mosy", LastName ="Kvold",SecondName=" ", DateOfBirth = new DateTime(1999,3,3) },
-            //        author
-            //    },
-            //    PublishingCodeId = 2,
-            //    //TypeOfPublishingCode = new PublishingCode
-            //    //{
-            //    //    Name = "ISBN"
-            //    //}, // замініть на відповідне значення коду публікації
-            //    Year = 2025, // рік публікації
-            //    Country = "Україна", // країна
-            //    City = "Київ" // місто
-            //};
-
-           
-           // using var ctx = new BooksContext();
-            //вщетукctx.Database.EnsureCreated();
-
-            //ctx.PublishingCodes.AddRange(
-            //new PublishingCode { Name = "ISBN" },
-            //new PublishingCode { Name = "ББК" },
-            //new PublishingCode { Name = "УДК" });
-
-            //ctx.DocumentTypes.AddRange(
-            //new DocumentType { Name = "Паспорт" },
-            //new DocumentType { Name = "Водійське посвідчення" },
-            //new DocumentType { Name = "ID-карта" });
-            //ctx.SaveChanges();
-            //ctx.Employees.Add(employee);
-            //ctx.Employees.Add(reader);
-            //ctx.Authors.Add(author);
-            //ctx.Book.Add(book);
-            //ctx.SaveChanges();
-            
+            } 
         }
     }
 }
