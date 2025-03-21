@@ -10,6 +10,7 @@ namespace BookWise
         {
             bool nenu = true;
             using var ctx = new BooksContext();
+
             while (true) 
             {
                 Console.WriteLine("login(l) or Register(r)");
@@ -25,6 +26,7 @@ namespace BookWise
                         .FirstOrDefault(l => EF.Functions.Collate(l.Login, "SQL_Latin1_General_CP1_CS_AS") == login);
                     if (user != null && user.Password == pass)
                     {
+                        var s = user.GetType().Name;
                         string discriminator = ctx.Entry(user).Property("Discriminator").CurrentValue as string;
                         if (discriminator == "Employee")
                         {

@@ -1,4 +1,6 @@
-﻿namespace DataLibrary
+﻿using System.Text.Json.Serialization;
+
+namespace DataLibrary
 {
     //        тип видавничого коду(посилання на таблицю)
     //Рік
@@ -11,6 +13,7 @@
         public int BookId { get; set; }
         public  Book Book { get; set; } 
         public int ReaderId { get; set; }
+        [JsonIgnore]
         public Reader Reader { get; set; }
         public DateTime DateBorrowed { get; set; }
         public DateTime DateForBorrowed { get; set; } = DateTime.Now.AddDays(30);
